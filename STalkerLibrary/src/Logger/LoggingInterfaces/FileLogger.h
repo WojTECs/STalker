@@ -1,6 +1,6 @@
 #pragma once
 
-#include <filesystem>
+//#include <experimental/filesystem>
 #include <fstream>
 
 #include "../LoggingInterface.h"
@@ -12,17 +12,18 @@ class FileLogger : public LoggingInterface
 {
 private:
 
-    std::filesystem::path mLoggingDirectoryPath = " ";
+    //std::experimental::filesystem::path mLoggingDirectoryPath = " ";
 
     uintmax_t mLoggingFileSize = 0;
     uintmax_t mLoggingDirectorySize = 0;
 
 public:
-    FileLogger(const std::filesystem::path iPath = "./");
+    FileLogger();//const std::experimental::filesystem::path iPath = "./");
     virtual ~FileLogger();
 
-    std::filesystem::path GetLoggingDirectoryPath() const {return mLoggingDirectoryPath;}
-    void setLoggingDirectoryPath (const std::filesystem::path iPath);
+    //std::experimental::filesystem::path
+    void GetLoggingDirectoryPath(){};// const {return mLoggingDirectoryPath;}
+    void setLoggingDirectoryPath ();//const std::experimental::filesystem::path iPath);
 
     uintmax_t getLoggingFileSize() const {return mLoggingFileSize;}
     void setLoggingFileSize(const uintmax_t iSize){mLoggingFileSize = iSize;}
