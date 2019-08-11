@@ -15,4 +15,29 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -lstdc++fs")
 target_compile_options(STalkerApplicationExample PRIVATE -Werror)
 target_compile_features(STalkerApplicationExample PRIVATE cxx_std_17)
 
-target_link_libraries(STalkerApplicationExample PRIVATE STalkerLibrary /usr/lib/x86_64-linux-gnu/libboost_system.so /usr/lib/x86_64-linux-gnu/libboost_thread.so)
+#TODO: ogarnac includy, ogarnac metody linkowania
+include_directories("/opt/ros/melodic/include/")
+
+
+#If you have troubles with undefined reference, just add required lib below
+target_link_libraries(STalkerApplicationExample PRIVATE STalkerLibrary
+    /opt/ros/melodic/lib/libroscpp.so
+    /opt/ros/melodic/lib/librosconsole.so
+    /opt/ros/melodic/lib/librostime.so
+    /opt/ros/melodic/lib/librospack.so
+    /opt/ros/melodic/lib/libroscpp_serialization.so
+    /usr/lib/x86_64-linux-gnu/libboost_system.so
+    /usr/lib/x86_64-linux-gnu/libboost_thread.so)
+
+
+
+
+
+
+
+
+
+
+
+
+

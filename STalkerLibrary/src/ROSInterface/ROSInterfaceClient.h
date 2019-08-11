@@ -1,43 +1,52 @@
-//#pragma once
+#pragma once
 
-//#include <vector>
-//#include <memory>
+#include <vector>
+#include <memory>
+
+#include "../DataExchanged/DownstreamDataType.h"
+#include "../DataExchanged/UpstreamDataType.h"
+
+#include "../Logger/Logger.h"
+
+#include "ros/ros.h"
+#include "std_msgs/String.h"
 
 
-//#include "../Logger/Logger.h"
+namespace ROSInterface
+{
+
+class ROSInterfaceClient
+{
+private:
+    static std::list<std::weak_ptr<Interface::DownstreamDataType>> mExpectedDataTypes;
+
+    ros::NodeHandle mNodeHandle;
+    ros::Subscriber mSubscriber;
+
+    ros::AsyncSpinner spinner;
+    static ros::Publisher chatter_pub;
+
+public:
+    //Adds >>REFERENCE<< for the object in the internal list of expected data types.
+    static void addExpectedDataType(const std::shared_ptr<Interface::DownstreamDataType>& iExpectedDataType);
+    //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
+    static void clear();
 
 
-//namespace STInterface
-//{
 
-//class STInterfaceClient
-//{
-//private:
-//    static std::list<std::weak_ptr<STInterface::ExpectedDataType>> mExpectedDataTypes;
+    //#TODO - dodaj metode initu listenera - teraz to robi konstruktor a to nie jest oczywiste
+    int b;
+    int a();
 
-//    boost::asio::io_service mIoService;
-//    boost::asio::ip::tcp::acceptor mAcceptor;
 
-//    bool mContinueProcessing;
-//    boost::thread* mThread;
-//    void read(boost::asio::ip::tcp::socket & socket);
-//    void send(boost::asio::ip::tcp::socket & socket, const std::string& message);
 
-//    int**** capitanJack;//easter egg
 
-//public:
-//    //Adds >>REFERENCE<< for the object in the internal list of expected data types.
-//    static void addExpectedDataType(const std::shared_ptr<STInterface::ExpectedDataType>& iExpectedDataType);
-//    //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
-//    static void clear();
+    static void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
 
-//    STInterfaceClient(boost::asio::ip::tcp iConnectionType, unsigned short iPort);
-//    virtual ~STInterfaceClient();
+    static void publishData(Interface::UpstreamDataType& iData);
 
-//    void processOneLoop();
-//    void processContinously();
-//    void processContinouslyInSeparateThread();
-//    void stopProcessing();
-//};
+    ROSInterfaceClient();
+    virtual ~ROSInterfaceClient();
+};
 
-//} //namespace STInterface
+} //namespace STInterface

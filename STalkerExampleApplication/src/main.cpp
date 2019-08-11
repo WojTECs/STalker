@@ -2,31 +2,47 @@
 #include <string>
 #include <memory>
 #include <boost/asio.hpp>
+#include "ros/ros.h"
+#include "std_msgs/String.h"
 
 #include "STalkerLibraryInterface.h"
 
 using namespace std;
 
-int main(int argv, char* argc[])
+
+#include <sstream>
+
+
+int main(int argc, char **argv)
 {
-    STInterface::STInterfaceClient client(boost::asio::ip::tcp::v4(),1227);
+    ros::init(argc, argv, "STalker");
 
-    std::shared_ptr<STInterface::ExpectedDataTypes::AccelerometerFrame>accelerometerFrame(new STInterface::ExpectedDataTypes::AccelerometerFrame);
-    client.addExpectedDataType(accelerometerFrame);
-    std::shared_ptr<STInterface::ExpectedDataTypes::EncoderFrame>encoderFrame(new STInterface::ExpectedDataTypes::EncoderFrame);
-    client.addExpectedDataType(encoderFrame);
-    std::shared_ptr<STInterface::ExpectedDataTypes::GPSFrame>gpsFrame(new STInterface::ExpectedDataTypes::GPSFrame);
-    client.addExpectedDataType(gpsFrame);
-    std::shared_ptr<STInterface::ExpectedDataTypes::GyroscopeFrame>gyroscopeFrame(new STInterface::ExpectedDataTypes::GyroscopeFrame);
-    client.addExpectedDataType(gyroscopeFrame);
-    std::shared_ptr<STInterface::ExpectedDataTypes::MagnetometerFrame>magnetometerFrame(new STInterface::ExpectedDataTypes::MagnetometerFrame);
-    client.addExpectedDataType(magnetometerFrame);
-    std::shared_ptr<STInterface::ExpectedDataTypes::PWMFrame>pwmFrame(new STInterface::ExpectedDataTypes::PWMFrame);
-    client.addExpectedDataType(pwmFrame);
-    std::shared_ptr<STInterface::ExpectedDataTypes::TimersFrame>timersFrame(new STInterface::ExpectedDataTypes::TimersFrame);
-    client.addExpectedDataType(timersFrame);
+    ROSInterface::ROSInterfaceClient rosClient;
 
-    client.processContinouslyInSeparateThread();
+    //#TODO remove
+    rosClient.b=1;
+    //#TODO add exception handling for situation where port is occupied
+    STInterface::STInterfaceClient stClient(boost::asio::ip::tcp::v4(),1228);
+
+    std::shared_ptr<Interface::DownstreamData::IMUFrame>imuFrame(new Interface::DownstreamData::IMUFrame);
+    rosClient.addExpectedDataType(imuFrame);
+
+    std::shared_ptr<Interface::UpstreamData::AccelerometerFrame>accelerometerFrame(new Interface::UpstreamData::AccelerometerFrame);
+    stClient.addExpectedDataType(accelerometerFrame);
+    std::shared_ptr<Interface::UpstreamData::EncoderFrame>encoderFrame(new Interface::UpstreamData::EncoderFrame);
+    stClient.addExpectedDataType(encoderFrame);
+    std::shared_ptr<Interface::UpstreamData::GPSFrame>gpsFrame(new Interface::UpstreamData::GPSFrame);
+    stClient.addExpectedDataType(gpsFrame);
+    std::shared_ptr<Interface::UpstreamData::GyroscopeFrame>gyroscopeFrame(new Interface::UpstreamData::GyroscopeFrame);
+    stClient.addExpectedDataType(gyroscopeFrame);
+    std::shared_ptr<Interface::UpstreamData::MagnetometerFrame>magnetometerFrame(new Interface::UpstreamData::MagnetometerFrame);
+    stClient.addExpectedDataType(magnetometerFrame);
+    std::shared_ptr<Interface::UpstreamData::PWMFrame>pwmFrame(new Interface::UpstreamData::PWMFrame);
+    stClient.addExpectedDataType(pwmFrame);
+    std::shared_ptr<Interface::UpstreamData::TimersFrame>timersFrame(new Interface::UpstreamData::TimersFrame);
+    stClient.addExpectedDataType(timersFrame);
+
+    stClient.processContinouslyInSeparateThread();
 
 
     std::shared_ptr<STalker::LogUtils::LoggingInterface> terminalLogger(new STalker::LogUtils::TerminalLogger);

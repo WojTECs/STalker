@@ -18,9 +18,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -lstdc++fs")
 
 find_package(Threads REQUIRED)
 
+#TODO: ogarnac includy, ogarnac metody linkowania
 target_include_directories(STalkerLibrary
 	PUBLIC include
 	PRIVATE src
+        "/opt/ros/melodic/include/"
 )
 
-target_link_libraries(STalkerLibrary PRIVATE /usr/lib/x86_64-linux-gnu/libboost_system.so /usr/lib/x86_64-linux-gnu/libboost_thread.so Threads::Threads)
+target_link_libraries(STalkerLibrary PRIVATE
+    /opt/ros/melodic/lib/libroscpp.so
+    /opt/ros/melodic/lib/librosconsole.so
+    /usr/lib/x86_64-linux-gnu/libboost_system.so
+    /usr/lib/x86_64-linux-gnu/libboost_thread.so
+    Threads::Threads)
