@@ -1,11 +1,11 @@
 #include "IMUFrame.h"
 
 #include <boost/exception/diagnostic_information.hpp>
+#include <ros/console.h>
 
-//#TODO sort includes
 Interface::DownstreamData::IMUFrame::IMUFrame()
 {
-    mProtocolIndentificator = "IMUFrame";
+    potocolIndentificator = "IMUFrame";
 }
 
 Interface::DownstreamData::IMUFrame::~IMUFrame()
@@ -35,8 +35,7 @@ void Interface::DownstreamData::IMUFrame::deserialize(boost::property_tree::ptre
     catch (const boost::exception& e)
     {
         std::string diag = diagnostic_information(e);
-        //#TODO bad frame
-
+        ROS_ERROR("Bad IMU frame received. Boost says: %s", diag.c_str());
     }
 
 }

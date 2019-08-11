@@ -12,14 +12,17 @@ class DownstreamDataType
 {
 private:
 protected:
-    std::string mProtocolIndentificator;
+
+    std::string potocolIndentificator;
 
 public:
+
     virtual ~DownstreamDataType(){}
-    std::string getProtocolIdentificator() const{ return mProtocolIndentificator;}
+    std::string getProtocolIdentificator() const{ return potocolIndentificator;}
     virtual  std::vector<uint8_t> serialize() = 0;
     virtual void deserialize(boost::property_tree::ptree& pt) = 0;
     virtual void doTheProcessing() = 0;
+
 };
 
 } //namespace STInterface

@@ -1,11 +1,5 @@
 #pragma once
 
-#include "../src/Logger/Logger.h"
-#include "../src/Logger/LoggingInterface.h"
-#include "../src/Logger/LoggerGlobals.h"
-#include "../src/Logger/LoggingInterfaces/TerminalLogger.h"
-#include "../src/Logger/LoggingInterfaces/TCPLogger.h"
-#include "../src/Logger/LoggingInterfaces/FileLogger.h"
 #include "../src/STInterface/STInterfaceClient.h"
 #include "../src/ROSInterface/ROSInterfaceClient.h"
 

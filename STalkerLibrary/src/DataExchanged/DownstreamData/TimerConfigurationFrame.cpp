@@ -1,11 +1,12 @@
 #include "TimerConfigurationFrame.h"
 
 #include <boost/exception/diagnostic_information.hpp>
+#include <ros/console.h>
 
 
 Interface::DownstreamData::TimerConfigurationFrame::TimerConfigurationFrame()
 {
-    mProtocolIndentificator = "TimerConfigurationFrame";
+    potocolIndentificator = "TimerConfigurationFrame";
 }
 
 Interface::DownstreamData::TimerConfigurationFrame::~TimerConfigurationFrame()
@@ -39,8 +40,7 @@ void Interface::DownstreamData::TimerConfigurationFrame::deserialize(boost::prop
     catch (const boost::exception& e)
     {
         std::string diag = diagnostic_information(e);
-        //#TODO bad frame
-
+        ROS_ERROR("Bad Timer frame received. Boost says: %s", diag.c_str());
     }
 }
 

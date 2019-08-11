@@ -18,14 +18,13 @@ private:
 
 public:
 
-//#TODO add consts
-    //#TODO check empty //# in case i forgot to write todo
-  TimerConfigurationFrame();
-  virtual ~TimerConfigurationFrame();
+    TimerConfigurationFrame();
+    virtual ~TimerConfigurationFrame();
 
-  std::vector<uint8_t> serialize();
-   void deserialize(boost::property_tree::ptree& pt);
-   void doTheProcessing();
+    std::vector<uint8_t> serialize();
+    void deserialize(boost::property_tree::ptree& pt);
+    void doTheProcessing();
+
 };
 }
 }

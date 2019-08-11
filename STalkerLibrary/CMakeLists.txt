@@ -1,5 +1,7 @@
 project(STalkerLibrary)
 
+#Some people say that GLOB is a bad practice cuz after git pull you have to rerun cmake
+# but I don't think it's a big problem. And CMAke is cleaner for sure
 file(GLOB_RECURSE lib1_SOURCES
         "*.h"
         "*.cpp"
@@ -10,15 +12,13 @@ add_library(STalkerLibrary SHARED ${lib1_SOURCES})
 target_compile_options(STalkerLibrary PRIVATE -Werror)
 target_compile_features(STalkerLibrary PRIVATE cxx_std_17)
 
-#pthread requires flags below on Arch derived systems to build properly
-#Linux CC 4.19.59-1-MANJARO #1 SMP PREEMPT Mon Jul 15 18:23:58 UTC 2019 x86_64 GNU/Linux
 set(CMAKE_THREAD_PREFER_PTHREAD ON)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -lstdc++fs")
 
 find_package(Threads REQUIRED)
 
-#TODO: ogarnac includy, ogarnac metody linkowania
+#Those fixed paths look awful but they're meant for a fixed system(this very virtual machine)
+#it's the simplest sufficient solutin in this case
 target_include_directories(STalkerLibrary
 	PUBLIC include
 	PRIVATE src

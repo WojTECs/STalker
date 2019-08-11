@@ -2,8 +2,8 @@
 
 Interface::UpstreamData::TimersFrame::TimersFrame()
 {
-  protocolIndentificator = uint8_t{0x03};
-  datasetBinarySize = 0;//#TODO
+    protocolIndentificator = uint8_t{0x03};
+    datasetBinarySize = 0;//Unknown yet therefore can't be implemented
 }
 
 Interface::UpstreamData::TimersFrame::~TimersFrame()

@@ -1,0 +1,30 @@
+data: "{\n    \"AccelerometerFrames\": [\n        {\n            \"xAxis\": \"257\",\n \
+  \           \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n            \"\
+  timestamp\": \"168496141\"\n        },\n        {\n            \"xAxis\": \"258\"\
+  ,\n            \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n          \
+  \  \"timestamp\": \"168496141\"\n        },\n        {\n            \"xAxis\": \"\
+  259\",\n            \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n     \
+  \       \"timestamp\": \"168496141\"\n        }\n    ]\n}\n"
+---
+data: "{\n    \"GyroscopeFrames\": [\n        {\n            \"xAxis\": \"257\",\n     \
+  \       \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n            \"timestamp\"\
+  : \"168496141\"\n        },\n        {\n            \"xAxis\": \"258\",\n      \
+  \      \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n            \"timestamp\"\
+  : \"168496141\"\n        },\n        {\n            \"xAxis\": \"259\",\n      \
+  \      \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n            \"timestamp\"\
+  : \"168496141\"\n        }\n    ]\n}\n"
+---
+data: "{\n    \"MagnetometerFrames\": [\n        {\n            \"xAxis\": \"257\",\n  \
+  \          \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n            \"\
+  timestamp\": \"168496141\"\n        },\n        {\n            \"xAxis\": \"258\"\
+  ,\n            \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n          \
+  \  \"timestamp\": \"168496141\"\n        },\n        {\n            \"xAxis\": \"\
+  259\",\n            \"yAxis\": \"514\",\n            \"zAxis\": \"771\",\n     \
+  \       \"timestamp\": \"168496141\"\n        }\n    ]\n}\n"
+---
+data: "{\n    \"PWMFrame\": {\n        \"MovementDirection\": \"forward\",\n        \"LeftSidePWM\"\
+  : \"8995\",\n        \"RightSidePWM\": \"13364\"\n    }\n}\n"
+---
+data: "{\n    \"EncoderFrame\": {\n        \"LeftSideSpinCount\": \"8995\",\n        \"\
+  RightSideSpinCount\": \"13364\"\n    }\n}\n"
+---

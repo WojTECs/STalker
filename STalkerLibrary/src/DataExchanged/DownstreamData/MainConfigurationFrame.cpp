@@ -4,12 +4,12 @@
 
 Interface::DownstreamData::MainConfigurationFrame::MainConfigurationFrame()
 {
-    mProtocolIndentificator = "MainConfigurationFrame";
+    potocolIndentificator = "MainConfigurationFrame";
 }
 
 Interface::DownstreamData::MainConfigurationFrame::~MainConfigurationFrame()
 {
-    //#TODO implement
+
 }
 
 std::vector<uint8_t> Interface::DownstreamData::MainConfigurationFrame::serialize()

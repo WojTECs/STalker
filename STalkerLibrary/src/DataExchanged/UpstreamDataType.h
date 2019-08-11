@@ -1,21 +1,24 @@
 #pragma once
 
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
 #include <boost/property_tree/ptree.hpp>
+#include <ros/console.h>
 
 namespace Interface
 {
 
-/// Translates data from input (ST) binary format on the JSON frames (ROS) format
+// Translates data from input (ST) binary format on the JSON frames (ROS) format
 class UpstreamDataType
 {
 
 private:
 protected:
-  uint8_t protocolIndentificator;
-  std::size_t datasetBinarySize;
+
+    uint8_t protocolIndentificator;
+    std::size_t datasetBinarySize;
+
 public:
 
     uint8_t getProtocolIdentificator() const{ return protocolIndentificator;}

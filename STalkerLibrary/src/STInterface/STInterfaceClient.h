@@ -2,10 +2,10 @@
 
 #include <vector>
 #include <memory>
+
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 
-#include "../Logger/Logger.h"
 #include "../DataExchanged/DownstreamDataType.h"
 #include "../DataExchanged/UpstreamDataType.h"
 
@@ -16,19 +16,21 @@ namespace STInterface
 class STInterfaceClient
 {
 private:
-    static std::list<std::weak_ptr<Interface::UpstreamDataType>> mExpectedDataTypes;
 
-    boost::asio::io_service mIoService;
-    boost::asio::ip::tcp::acceptor mAcceptor;
+    static std::list<std::weak_ptr<Interface::UpstreamDataType>> expectedDataTypes;
 
-    bool mContinueProcessing;
-    boost::thread* mThread;
+    boost::asio::io_service ioService;
+    boost::asio::ip::tcp::acceptor acceptor;
+
+    bool continueProcessing;
+    boost::thread* thread;
     void read(boost::asio::ip::tcp::socket & socket);
     void send(boost::asio::ip::tcp::socket & socket, const std::string& message);
 
     int**** capitanJack;//easter egg
 
 public:
+
     //Adds >>REFERENCE<< for the object in the internal list of expected data types.
     static void addExpectedDataType(const std::shared_ptr<Interface::UpstreamDataType>& iExpectedDataType);
     //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
@@ -43,6 +45,7 @@ public:
     void processContinously();
     void processContinouslyInSeparateThread();
     void stopProcessing();
+
 };
 
 } //namespace STInterface

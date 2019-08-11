@@ -1,24 +1,29 @@
 #include "ROSInterfaceClient.h"
-#include "../Logger/Logger.h"
-#include "../Logger/Logger.h"
-#include "../STInterface/STInterfaceClient.h"
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <ros/console.h>
+
+#include "../STInterface/STInterfaceClient.h"
+
+
 
 
 ros::Publisher ROSInterface::ROSInterfaceClient::chatter_pub = ros::Publisher();
-std::list<std::weak_ptr<Interface::DownstreamDataType>> ROSInterface::ROSInterfaceClient::mExpectedDataTypes;
+std::list<std::weak_ptr<Interface::DownstreamDataType>> ROSInterface::ROSInterfaceClient::expectedDataTypes;
 
 
 void ROSInterface::ROSInterfaceClient::addExpectedDataType(const std::shared_ptr<Interface::DownstreamDataType> &iExpectedDataType)
 {
-    mExpectedDataTypes.push_back(iExpectedDataType);
+    expectedDataTypes.push_back(iExpectedDataType);
+    ROS_DEBUG("ROS Interface enlisted new data type");
 }
 
 void ROSInterface::ROSInterfaceClient::clear()
 {
-    mExpectedDataTypes.clear();
+    expectedDataTypes.clear();
+    ROS_DEBUG("ROS Interface cleared expected data types list");
 }
 
 void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::String::ConstPtr& msg)
@@ -29,20 +34,18 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
 
     boost::property_tree::ptree pt;
 
-    //#TODO catch exception from line below if json isn't valid enable_current_exception(enable_error_info(e));
     try
     {
-         boost::property_tree::read_json(ss, pt);
+        boost::property_tree::read_json(ss, pt);
     }
     catch (const boost::exception& e)
     {
         std::string diag = diagnostic_information(e);
-        //#TODO log error
+        ROS_ERROR("Probably received broken JSON. Boost says: %s", diag.c_str());
 
     }
 
-    //#TODO - what if expected data type id or size == 0
-    for (auto ExpectedDataTypeIterator = mExpectedDataTypes.begin(); ExpectedDataTypeIterator != mExpectedDataTypes.end(); ExpectedDataTypeIterator++)
+    for (auto ExpectedDataTypeIterator = expectedDataTypes.begin(); ExpectedDataTypeIterator != expectedDataTypes.end(); ExpectedDataTypeIterator++)
     {
         //Checkup whether reference still exists
         std::shared_ptr<Interface::DownstreamDataType> ExpectedDataTypeSharedBond;
@@ -62,56 +65,32 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
         }
         else
         {
-            mExpectedDataTypes.erase(ExpectedDataTypeIterator);
+            expectedDataTypes.erase(ExpectedDataTypeIterator);
+            ROS_ERROR("ROS interface found empty reference on the expected data types list");
         }
     }
-
-    //#TODO remove
-    //std::string = pt.get<std::string>("DataType");
-//    if(pt.get_child_optional( "EncoderFrame"))
-//    {
-//     std::cout<<"Us";
-//    }
-
-
-
 }
 
 void ROSInterface::ROSInterfaceClient::publishData(Interface::UpstreamDataType& iData)
 {
-
-    ros::Publisher chatter_pub = ros::NodeHandle().advertise<std_msgs::String>("STalkerOut", 1000);
-
-
-
     std::ostringstream pTreeToStringCatalizator;
     boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, iData.serialize());
 
     std_msgs::String message;
     message.data  = pTreeToStringCatalizator.str();
 
-    //#TODO -remove
-    //message.data = "{ \"IMUFrame\": { \"RegistryAddress\": \"8995\", \"RegistryValue\": \"13364\" },\"RegistryAddress\": \"8995\" } ";
-
     ROSInterface::ROSInterfaceClient::chatter_pub.publish(message);
-
-    //#TODO - solve the spinning problem to spin in a separate thread more frequently
-    ros::spinOnce();
-
-    ROS_INFO("%s", message.data.c_str());
 }
 
-ROSInterface::ROSInterfaceClient::ROSInterfaceClient()
-    :
-      spinner(0)
+ROSInterface::ROSInterfaceClient::ROSInterfaceClient() :  spinner(0)
 {
     ros::NodeHandle nodeHandle;
-    ROSInterface::ROSInterfaceClient::chatter_pub = nodeHandle.advertise<std_msgs::String>("STalkerIn", 1000);
+    ROSInterface::ROSInterfaceClient::chatter_pub = nodeHandle.advertise<std_msgs::String>("STalkerOut", 1000);
 
-
-    mSubscriber = mNodeHandle.subscribe("chatter", 1000, receiveMessageCallback);
-
+    subscriber = nodeHandle.subscribe("STalkerIn", 1000, receiveMessageCallback);
     spinner.start();
+
+    ROS_INFO("ROS Interface Client created");
 }
 
 ROSInterface::ROSInterfaceClient::~ROSInterfaceClient()

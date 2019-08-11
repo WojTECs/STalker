@@ -1,10 +1,11 @@
 #include "MovementFrame.h"
 
 #include <boost/exception/diagnostic_information.hpp>
+#include <ros/console.h>
 
 Interface::DownstreamData::MovementFrame::MovementFrame()
 {
-    mProtocolIndentificator = "MovementFrame";
+    potocolIndentificator = "MovementFrame";
 }
 
 Interface::DownstreamData::MovementFrame::~MovementFrame()
@@ -38,8 +39,7 @@ void Interface::DownstreamData::MovementFrame::deserialize(boost::property_tree:
     catch (const boost::exception& e)
     {
         std::string diag = diagnostic_information(e);
-        //#TODO bad frame
-
+        ROS_ERROR("Bad Movement frame received. Boost says: %s", diag.c_str());
     }
 }
 

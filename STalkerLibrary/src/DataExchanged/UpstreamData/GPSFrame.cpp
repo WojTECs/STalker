@@ -1,9 +1,11 @@
 #include "GPSFrame.h"
 
+#include <ros/console.h>
+
 Interface::UpstreamData::GPSFrame::GPSFrame()
 {
-  protocolIndentificator = uint8_t{0x08};
-  datasetBinarySize = 20;//#TODO
+    protocolIndentificator = uint8_t{0x08};
+    datasetBinarySize = 20;
 }
 
 Interface::UpstreamData::GPSFrame::~GPSFrame()

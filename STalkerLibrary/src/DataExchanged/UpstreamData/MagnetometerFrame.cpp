@@ -1,10 +1,12 @@
 #include "MagnetometerFrame.h"
 
+#include <ros/console.h>
+
 
 Interface::UpstreamData::MagnetometerFrame::MagnetometerFrame()
 {
-  protocolIndentificator = uint8_t{0x06};
-  datasetBinarySize = 10;
+    protocolIndentificator = uint8_t{0x06};
+    datasetBinarySize = 10;
 }
 
 Interface::UpstreamData::MagnetometerFrame::~MagnetometerFrame()
@@ -14,10 +16,10 @@ Interface::UpstreamData::MagnetometerFrame::~MagnetometerFrame()
 
 void Interface::UpstreamData::MagnetometerFrame::deserialize(std::vector<uint8_t> iDataStream)
 {
-    //#TODO make it more beautiful
+
     if(iDataStream.size() % datasetBinarySize != 0)
     {
-        //#TODO log error
+        ROS_ERROR("Bad Magnetometer frame received. Length is mismatched");
         return;
     }
 
@@ -33,18 +35,18 @@ void Interface::UpstreamData::MagnetometerFrame::deserialize(std::vector<uint8_t
 
         byteShift = i * datasetBinarySize;
         datasets[i].xAxis = (iDataStream.at(0 + byteShift)<<8)+
-                                iDataStream.at(1 + byteShift);
+                iDataStream.at(1 + byteShift);
 
         datasets[i].yAxis = (iDataStream.at(2 + byteShift)<<8)+
-                                iDataStream.at(3 + byteShift);
+                iDataStream.at(3 + byteShift);
 
         datasets[i].zAxis = (iDataStream.at(4 + byteShift)<<8)+
-                                iDataStream.at(5 + byteShift);
+                iDataStream.at(5 + byteShift);
 
         datasets[i].timestamp = (iDataStream.at(6 + byteShift)<<24)+
-                                (iDataStream.at(7 + byteShift)<<16)+
-                                (iDataStream.at(8 + byteShift)<<8)+
-                                    iDataStream.at(9 + byteShift);
+                (iDataStream.at(7 + byteShift)<<16)+
+                (iDataStream.at(8 + byteShift)<<8)+
+                iDataStream.at(9 + byteShift);
     }
 }
 

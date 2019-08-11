@@ -12,12 +12,13 @@ class MainConfigurationFrame : public Interface::DownstreamDataType
 private:
 public:
 
-  MainConfigurationFrame();
-  virtual ~MainConfigurationFrame();
+    MainConfigurationFrame();
+    virtual ~MainConfigurationFrame();
 
-  std::vector<uint8_t> serialize();
-void deserialize(boost::property_tree::ptree& pt);
-void doTheProcessing();
+    std::vector<uint8_t> serialize();
+    void deserialize(boost::property_tree::ptree& pt);
+    void doTheProcessing();
+
 };
 }
 }

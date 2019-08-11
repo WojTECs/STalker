@@ -22,12 +22,14 @@ private:
     std::vector<Dataset> datasets;
 
 public:
-  GyroscopeFrame();
-  virtual ~GyroscopeFrame();
 
-  void deserialize(std::vector<uint8_t> iDataStream) override;
-  boost::property_tree::ptree serialize() override;
-  void doTheProcessing() override;
+    GyroscopeFrame();
+    virtual ~GyroscopeFrame();
+
+    void deserialize(std::vector<uint8_t> iDataStream) override;
+    boost::property_tree::ptree serialize() override;
+    void doTheProcessing() override;
+
 };
 }
 }

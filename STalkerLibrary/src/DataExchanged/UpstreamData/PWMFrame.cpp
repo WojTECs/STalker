@@ -1,9 +1,11 @@
 #include "PWMFrame.h"
 
+#include <ros/console.h>
+
 Interface::UpstreamData::PWMFrame::PWMFrame()
 {
-  protocolIndentificator = uint8_t{0x02};
-  datasetBinarySize = 5;
+    protocolIndentificator = uint8_t{0x02};
+    datasetBinarySize = 5;
 }
 
 Interface::UpstreamData::PWMFrame::~PWMFrame()
@@ -13,18 +15,14 @@ Interface::UpstreamData::PWMFrame::~PWMFrame()
 
 void Interface::UpstreamData::PWMFrame::deserialize(std::vector<uint8_t> iDataStream)
 {
-    //#TODO if DataStream != binsize log error
-    try
+    if(iDataStream.size() != datasetBinarySize)
     {
-        movementDirection = iDataStream.at(0);
-        leftSidePWM = (iDataStream.at(1)<<8)+iDataStream.at(2);
-        rightSidePWM = (iDataStream.at(3)<<8)+iDataStream.at(4);
+        ROS_ERROR("Bad PWM frame received. Length is mismatched");
     }
-    catch (const std::out_of_range& oor)
-    {
-        //#TODO handling and logging
-        std::cerr << "Out of Range error: " << oor.what() << '\n';
-    }
+
+    movementDirection = iDataStream.at(0);
+    leftSidePWM = (iDataStream.at(1)<<8)+iDataStream.at(2);
+    rightSidePWM = (iDataStream.at(3)<<8)+iDataStream.at(4);
 }
 
 boost::property_tree::ptree Interface::UpstreamData::PWMFrame::serialize()

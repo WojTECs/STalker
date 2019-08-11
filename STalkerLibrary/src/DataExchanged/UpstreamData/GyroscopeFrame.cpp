@@ -1,9 +1,11 @@
 #include "GyroscopeFrame.h"
 
+#include <ros/console.h>
+
 Interface::UpstreamData::GyroscopeFrame::GyroscopeFrame()
 {
-  protocolIndentificator = 0x05;
-  datasetBinarySize = 10;
+    protocolIndentificator = 0x05;
+    datasetBinarySize = 10;
 }
 
 Interface::UpstreamData::GyroscopeFrame::~GyroscopeFrame()
@@ -13,10 +15,10 @@ Interface::UpstreamData::GyroscopeFrame::~GyroscopeFrame()
 
 void Interface::UpstreamData::GyroscopeFrame::deserialize(std::vector<uint8_t> iDataStream)
 {
-    //#TODO make it more beautiful
+
     if(iDataStream.size() % datasetBinarySize != 0)
     {
-        //#TODO log error
+        ROS_ERROR("Bad Gyroscope frame received. Lenght is mismatched");
         return;
     }
 
@@ -32,18 +34,18 @@ void Interface::UpstreamData::GyroscopeFrame::deserialize(std::vector<uint8_t> i
 
         byteShift = i * datasetBinarySize;
         datasets[i].xAxis = (iDataStream.at(0 + byteShift)<<8)+
-                                iDataStream.at(1 + byteShift);
+                iDataStream.at(1 + byteShift);
 
         datasets[i].yAxis = (iDataStream.at(2 + byteShift)<<8)+
-                                iDataStream.at(3 + byteShift);
+                iDataStream.at(3 + byteShift);
 
         datasets[i].zAxis = (iDataStream.at(4 + byteShift)<<8)+
-                                iDataStream.at(5 + byteShift);
+                iDataStream.at(5 + byteShift);
 
         datasets[i].timestamp = (iDataStream.at(6 + byteShift)<<24)+
-                                (iDataStream.at(7 + byteShift)<<16)+
-                                (iDataStream.at(8 + byteShift)<<8)+
-                                    iDataStream.at(9 + byteShift);
+                (iDataStream.at(7 + byteShift)<<16)+
+                (iDataStream.at(8 + byteShift)<<8)+
+                iDataStream.at(9 + byteShift);
     }
 }
 
