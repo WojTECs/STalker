@@ -43,3 +43,10 @@ void Interface::UpstreamData::PWMFrame::doTheProcessing()
 {
 
 }
+
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::PWMFrame::getClone()
+{
+    std::unique_ptr<Interface::UpstreamData::PWMFrame>pwmFrame(new Interface::UpstreamData::PWMFrame);
+    return std::move(pwmFrame);
+
+}

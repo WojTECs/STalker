@@ -9,7 +9,7 @@ def talker():
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(1) # 10hz
     while not rospy.is_shutdown():
-        hello_str = "{ \"IMUFrame\": { \"RegistryAddress\": \"8995\", \"RegistryValue\": \"13364\" },\"RegistryAddress\": \"8995\" } "
+        hello_str = "{ \"MovementFrame\": { \"movementDirection\": \"0\", \"leftSidePWM\": \"400\", \"rightSidePWM\": \"400\"  }} "
         rospy.loginfo(hello_str)
         pub.publish(hello_str)
         time.sleep( 2 )

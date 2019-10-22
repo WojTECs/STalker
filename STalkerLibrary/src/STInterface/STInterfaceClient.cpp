@@ -1,6 +1,8 @@
 #include "STInterfaceClient.h"
 
 #include <iostream>
+#include <utility>
+#include <algorithm>
 
 #include <boost/asio.hpp>
 #include <ros/console.h>
@@ -8,7 +10,8 @@
 #include "../ROSInterface/ROSInterfaceClient.h"
 #include "../DataExchanged/UpstreamData/GyroscopeFrame.h"
 
-std::list<std::weak_ptr<Interface::UpstreamDataType>> STInterface::STInterfaceClient::expectedDataTypes;
+
+//std::list<std::unique_ptr<Interface::UpstreamDataType>> STInterface::STInterfaceClient::expectedDataTypes;
 
 STInterface::STInterfaceClient::STInterfaceClient(boost::asio::ip::tcp iConnectionType, unsigned short iPort)
     : acceptor(ioService, boost::asio::ip::tcp::endpoint(iConnectionType, iPort ))
@@ -16,22 +19,28 @@ STInterface::STInterfaceClient::STInterfaceClient(boost::asio::ip::tcp iConnecti
     ROS_INFO("ST Interface Client created");
 }
 
-STInterface::STInterfaceClient::~STInterfaceClient()
+//#TODO iExpectedDataType shall be of cost & type(to not recreate entire object again, even tho it's singular operation
+void STInterface::STInterfaceClient::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
 {
-
-}
-
-void STInterface::STInterfaceClient::addExpectedDataType(const std::shared_ptr<Interface::UpstreamDataType> &iExpectedDataType)
-{
-
-    expectedDataTypes.push_back(iExpectedDataType);
+    expectedDataTypes.push_back(std::move(iExpectedDataType));
     ROS_DEBUG("ST Interface enlisted new data type");
 }
+
+//void STInterface::STInterfaceClient::setROSInterface(ROSInterface::ROSInterfaceClient &client)
+//{
+//    ROSClient=client;
+//}
 
 void STInterface::STInterfaceClient::clear()
 {
     expectedDataTypes.clear();
     ROS_DEBUG("ST Interface cleared expected data types list");
+}
+
+void STInterface::STInterfaceClient::run()
+{
+    start_accept();
+    ioService.run();
 }
 
 void STInterface::STInterfaceClient::publishData(std::vector<uint8_t> iData)
@@ -40,7 +49,7 @@ void STInterface::STInterfaceClient::publishData(std::vector<uint8_t> iData)
     boost::asio::ip::tcp::socket socket(io_service);
     try
     {
-        socket.connect( boost::asio::ip::tcp::endpoint( boost::asio::ip::address::from_string("127.0.0.1"), 45455 ));
+        socket.connect( boost::asio::ip::tcp::endpoint( boost::asio::ip::address::from_string("192.168.1.10"), 7 ));
     }
     catch (const boost::exception& e)
     {
@@ -57,89 +66,31 @@ void STInterface::STInterfaceClient::publishData(std::vector<uint8_t> iData)
     }
 }
 
-void STInterface::STInterfaceClient::read(boost::asio::ip::tcp::socket & socket)
+
+void STInterface::STInterfaceClient::start_accept()
 {
+    Session* newSession = new Session(ioService);
+    acceptor.async_accept(newSession->getSocket(),
+                           boost::bind(&STInterface::STInterfaceClient::handle_accept, this, newSession,
+                                       boost::asio::placeholders::error));
+}
 
-    boost::asio::streambuf initialDataBuffer;
-
-    boost::system::error_code error;
-    boost::asio::read( socket, initialDataBuffer, boost::asio::transfer_exactly(2), error );
-
-    const uint8_t* messageTypePtr = boost::asio::buffer_cast<const uint8_t*>(initialDataBuffer.data());
-
-    //first sent byte describes the data type that's about to be sent
-    uint8_t messageType = messageTypePtr[0];
-    //second byte describes the length
-    uint8_t messageByteCount = messageTypePtr[1];
-
-    for (auto ExpectedDataTypeIterator = expectedDataTypes.begin(); ExpectedDataTypeIterator != expectedDataTypes.end(); ExpectedDataTypeIterator++)
+void STInterface::STInterfaceClient::handle_accept(Session* newSession,
+                   const boost::system::error_code& error)
+{
+    if (!error)
     {
-        //Checkup whether reference still exists
-        std::shared_ptr<Interface::UpstreamDataType> ExpectedDataTypeSharedBond;
-        ExpectedDataTypeSharedBond = ExpectedDataTypeIterator->lock();
-
-        //if reference exists, and message type is correct
-        if(ExpectedDataTypeSharedBond)
+        for (auto ExpectedDataTypeIterator = expectedDataTypes.begin(); ExpectedDataTypeIterator != expectedDataTypes.end(); ExpectedDataTypeIterator++)
         {
-            if(ExpectedDataTypeSharedBond->getProtocolIdentificator() == messageType)
-            {
-                boost::asio::streambuf actuallDataBuffer;
-                //read as much as is told by messageByteCount
-                boost::asio::read( socket,
-                                   actuallDataBuffer,
-                                   boost::asio::transfer_exactly(messageByteCount),
-                                   error);
-
-                const uint8_t* messageTypePtr = boost::asio::buffer_cast<const uint8_t*>(actuallDataBuffer.data());
-
-                //messageTypePtr+1 and bin size +1 cause the first byte is a fame type - it's unwanted in the vector
-                std::vector<uint8_t> oDataRead(messageTypePtr, messageTypePtr+messageByteCount);
-
-                ExpectedDataTypeSharedBond->deserialize(oDataRead);
-                ExpectedDataTypeSharedBond->doTheProcessing();
-
-                ROSInterface::ROSInterfaceClient::publishData(*ExpectedDataTypeSharedBond);
-            }
+            newSession->addExpectedDataType(ExpectedDataTypeIterator->get()->getClone());
         }
-        else
-        {
-            expectedDataTypes.erase(ExpectedDataTypeIterator);
-            ROS_ERROR("ST interface found empty reference on the expected data types list");
-        }
+
+        newSession->start();
     }
-}
-
-void STInterface::STInterfaceClient::send(boost::asio::ip::tcp::socket & socket, const std::string& message)
-{
-    const std::string msg = message + "\n";
-    boost::asio::write( socket, boost::asio::buffer(message) );
-}
-
-
-void STInterface::STInterfaceClient::processOneLoop()
-{
-    boost::asio::ip::tcp::socket socket(ioService);
-    acceptor.accept(socket);
-    read(socket);
-    send(socket, "");
-}
-
-void STInterface::STInterfaceClient::processContinously()
-{
-    ROS_DEBUG("ST Interface Client begins continous processing");
-    continueProcessing = true;
-    while(continueProcessing == true)
+    else
     {
-        processOneLoop();
+        delete newSession;
     }
-}
 
-void STInterface::STInterfaceClient::processContinouslyInSeparateThread()
-{
-    thread = new boost::thread(boost::bind(&STInterface::STInterfaceClient::processContinously, this));
-}
-
-void STInterface::STInterfaceClient::stopProcessing()
-{
-    continueProcessing = false;
+    start_accept();
 }

@@ -8,7 +8,7 @@
 
 #include "../DataExchanged/DownstreamDataType.h"
 #include "../DataExchanged/UpstreamDataType.h"
-
+//#include "../STInterface/STInterfaceClient.h"
 
 namespace ROSInterface
 {
@@ -17,7 +17,8 @@ class ROSInterfaceClient
 {
 private:
 
-    static std::list<std::weak_ptr<Interface::DownstreamDataType>> expectedDataTypes;
+    //STInterface::STInterfaceClient& STClient;
+    std::list<std::unique_ptr<Interface::DownstreamDataType>> expectedDataTypes;
 
     ros::NodeHandle nodeHandle;
     ros::Subscriber subscriber;
@@ -26,13 +27,14 @@ private:
     static ros::Publisher chatter_pub;
 
 public:
+    //void setSTInterface(STInterface::STInterfaceClient& client);
 
     //Adds >>REFERENCE<< for the object in the internal list of expected data types.
-    static void addExpectedDataType(const std::shared_ptr<Interface::DownstreamDataType>& iExpectedDataType);
+    void addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType);
     //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
-    static void clear();
-    static void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
-    static void publishData(Interface::UpstreamDataType& iData);
+    void clear();
+    void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
+    void publishData(Interface::UpstreamDataType& iData);
 
     ROSInterfaceClient();
     virtual ~ROSInterfaceClient();

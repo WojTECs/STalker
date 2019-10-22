@@ -22,6 +22,7 @@ public:
     void deserialize(std::vector<uint8_t> iDataStream) override;
     boost::property_tree::ptree serialize() override;
     void doTheProcessing() override;
+    std::unique_ptr<Interface::UpstreamDataType> getClone();
 
 };
 }

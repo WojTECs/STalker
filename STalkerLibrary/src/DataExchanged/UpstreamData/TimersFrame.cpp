@@ -26,3 +26,9 @@ void Interface::UpstreamData::TimersFrame::doTheProcessing()
 
 }
 
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::TimersFrame::getClone()
+{
+    std::unique_ptr<Interface::UpstreamData::TimersFrame>timersFrame(new Interface::UpstreamData::TimersFrame);
+    return std::move(timersFrame);
+}
+

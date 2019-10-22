@@ -75,3 +75,10 @@ void Interface::UpstreamData::MagnetometerFrame::doTheProcessing()
 {
 
 }
+
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::MagnetometerFrame::getClone()
+{
+    std::unique_ptr<Interface::UpstreamData::MagnetometerFrame>magnetometerFrame(new Interface::UpstreamData::MagnetometerFrame);
+    return std::move(magnetometerFrame);
+
+}

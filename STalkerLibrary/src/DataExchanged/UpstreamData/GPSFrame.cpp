@@ -27,3 +27,10 @@ void Interface::UpstreamData::GPSFrame::doTheProcessing()
 {
 
 }
+
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::GPSFrame::getClone()
+{
+    std::unique_ptr<Interface::UpstreamData::GPSFrame>gpsFrame(new Interface::UpstreamData::GPSFrame);
+    return std::move(gpsFrame);
+
+}

@@ -73,3 +73,9 @@ void Interface::UpstreamData::AccelerometerFrame::doTheProcessing()
 {
 
 }
+
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::AccelerometerFrame::getClone()
+{
+    std::unique_ptr<Interface::UpstreamData::AccelerometerFrame>accelerometerFrame(new Interface::UpstreamData::AccelerometerFrame);
+    return std::move(accelerometerFrame);
+}

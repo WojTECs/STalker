@@ -42,3 +42,11 @@ void Interface::UpstreamData::EncoderFrame::doTheProcessing()
 {
 
 }
+
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::EncoderFrame::getClone()
+{
+
+    std::unique_ptr<Interface::UpstreamData::EncoderFrame>encoderFrame(new Interface::UpstreamData::EncoderFrame);
+    return std::move(encoderFrame);
+
+}

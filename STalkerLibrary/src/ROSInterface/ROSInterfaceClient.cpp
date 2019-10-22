@@ -11,12 +11,17 @@
 
 
 ros::Publisher ROSInterface::ROSInterfaceClient::chatter_pub = ros::Publisher();
-std::list<std::weak_ptr<Interface::DownstreamDataType>> ROSInterface::ROSInterfaceClient::expectedDataTypes;
+//std::list<std::unique_ptr<Interface::DownstreamDataType>> ROSInterface::ROSInterfaceClient::expectedDataTypes;
 
 
-void ROSInterface::ROSInterfaceClient::addExpectedDataType(const std::shared_ptr<Interface::DownstreamDataType> &iExpectedDataType)
+//void ROSInterface::ROSInterfaceClient::setSTInterface(STInterface::STInterfaceClient& client)
+//{
+//    //STClient = client;
+//}
+
+void ROSInterface::ROSInterfaceClient::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
 {
-    expectedDataTypes.push_back(iExpectedDataType);
+    //expectedDataTypes.push_back(std::move(iExpectedDataType));
     ROS_DEBUG("ROS Interface enlisted new data type");
 }
 
@@ -48,26 +53,26 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
     for (auto ExpectedDataTypeIterator = expectedDataTypes.begin(); ExpectedDataTypeIterator != expectedDataTypes.end(); ExpectedDataTypeIterator++)
     {
         //Checkup whether reference still exists
-        std::shared_ptr<Interface::DownstreamDataType> ExpectedDataTypeSharedBond;
-        ExpectedDataTypeSharedBond = ExpectedDataTypeIterator->lock();
+        //std::unique_ptr<Interface::DownstreamDataType> ExpectedDataTypeSharedBond;
+        //ExpectedDataTypeSharedBond = ExpectedDataTypeIterator->lock();
 
         //if reference exists, and message type is correct
-        if(ExpectedDataTypeSharedBond)
-        {
+        //if(ExpectedDataTypeSharedBond)
+        //{
             //if json trunk can be found
-            if(pt.get_child_optional(ExpectedDataTypeSharedBond->getProtocolIdentificator()))
+            if(pt.get_child_optional(ExpectedDataTypeIterator->get()->getProtocolIdentificator()))
             {
-                ExpectedDataTypeSharedBond->deserialize(pt);
-                ExpectedDataTypeSharedBond->doTheProcessing();
+                ExpectedDataTypeIterator->get()->deserialize(pt);
+                ExpectedDataTypeIterator->get()->doTheProcessing();
 
-                STInterface::STInterfaceClient::publishData(ExpectedDataTypeSharedBond->serialize());
+                //STInterface::STInterfaceClient::publishData(ExpectedDataTypeSharedBond->serialize());
             }
-        }
-        else
-        {
-            expectedDataTypes.erase(ExpectedDataTypeIterator);
-            ROS_ERROR("ROS interface found empty reference on the expected data types list");
-        }
+        //}
+//        else
+//        {
+//            expectedDataTypes.erase(ExpectedDataTypeIterator);
+//            ROS_ERROR("ROS interface found empty reference on the expected data types list");
+//        }
     }
 }
 
@@ -87,8 +92,8 @@ ROSInterface::ROSInterfaceClient::ROSInterfaceClient() :  spinner(0)
     ros::NodeHandle nodeHandle;
     ROSInterface::ROSInterfaceClient::chatter_pub = nodeHandle.advertise<std_msgs::String>("STalkerOut", 1000);
 
-    subscriber = nodeHandle.subscribe("STalkerIn", 1000, receiveMessageCallback);
-    spinner.start();
+    //subscriber = nodeHandle.subscribe("STalkerIn", 1000, receiveMessageCallback);
+    //spinner.start();
 
     ROS_INFO("ROS Interface Client created");
 }

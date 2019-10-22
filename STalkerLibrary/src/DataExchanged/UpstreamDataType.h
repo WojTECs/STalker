@@ -27,6 +27,7 @@ public:
     virtual void deserialize(std::vector<uint8_t> iDataStream)=0;
     virtual boost::property_tree::ptree serialize()=0;
     virtual void doTheProcessing()=0;
+    virtual std::unique_ptr<Interface::UpstreamDataType> getClone()=0;
 
     virtual ~UpstreamDataType(){}
 };

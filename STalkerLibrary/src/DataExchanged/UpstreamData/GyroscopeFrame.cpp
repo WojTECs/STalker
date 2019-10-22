@@ -74,3 +74,10 @@ void Interface::UpstreamData::GyroscopeFrame::doTheProcessing()
 {
 
 }
+
+std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::GyroscopeFrame::getClone()
+{
+    std::unique_ptr<Interface::UpstreamData::GyroscopeFrame>gyroscopeFrame(new Interface::UpstreamData::GyroscopeFrame);
+    return std::move(gyroscopeFrame);
+
+}
