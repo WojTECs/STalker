@@ -7,6 +7,7 @@
 Interface::DownstreamData::TimerConfigurationFrame::TimerConfigurationFrame()
 {
     potocolIndentificator = "TimerConfigurationFrame";
+    stIdentifier = 0x06;
 }
 
 Interface::DownstreamData::TimerConfigurationFrame::~TimerConfigurationFrame()
@@ -18,7 +19,7 @@ std::vector<uint8_t> Interface::DownstreamData::TimerConfigurationFrame::seriali
 {
     std::vector<uint8_t> output(5);
 
-    output[0] = 0x06;//ID
+    output[0] = stIdentifier;
     output[1] = timerID;
     output[2] = prescalerValue;
     output[3] = counterValue;
@@ -33,9 +34,9 @@ void Interface::DownstreamData::TimerConfigurationFrame::deserialize(boost::prop
     try
     {
         timerID = pt.get<int>("TimerConfigurationFrame.TimerID");
-        prescalerValue = pt.get<int>("IMUFrame.PrescallerValue");
-        counterValue = pt.get<int>("IMUFrame.CounterValue");
-        clockDivider = pt.get<int>("IMUFrame.ClockDividerValue");
+        prescalerValue = pt.get<int>("TimerConfigurationFrame.PrescallerValue");
+        counterValue = pt.get<int>("TimerConfigurationFrame.CounterValue");
+        clockDivider = pt.get<int>("TimerConfigurationFrame.ClockDividerValue");
     }
     catch (const boost::exception& e)
     {

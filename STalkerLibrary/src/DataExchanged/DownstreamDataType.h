@@ -13,6 +13,7 @@ class DownstreamDataType
 private:
 protected:
 
+    int stIdentifier;
     std::string potocolIndentificator;
 
 public:

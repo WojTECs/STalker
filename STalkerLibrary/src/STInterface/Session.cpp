@@ -1,5 +1,4 @@
 #include "Session.h"
-//#include "../ROSInterface/ROSInterfaceClient.h"
 
 void STInterface::Session::start()
 {
@@ -9,18 +8,17 @@ void STInterface::Session::start()
                                         boost::asio::placeholders::bytes_transferred));
 }
 
-//#TODO iExpectedDataType shall be of cost & type(to not recreate entire object again, even tho it's singular operation
 void STInterface::Session::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
 {
 
     expectedDataTypes.push_back(std::move(iExpectedDataType));
-    ROS_DEBUG("ST Interface enlisted new data type");
+    ROS_DEBUG("STInterface session enlisted new data type");
 }
 
-//void STInterface::Session::setROSInterface(ROSInterface::ROSInterfaceClient &client)
-//{
-//    ROSClient=client;
-//}
+void STInterface::Session::setROSInterface(std::shared_ptr<ROSInterface::ROSInterfaceClient> client)
+{
+    ROSClient=client;
+}
 
 void STInterface::Session::handleRead(const boost::system::error_code& error, size_t bytesTransferred)
 {
@@ -44,12 +42,6 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
 
             for (auto ExpectedDataTypeIterator = expectedDataTypes.begin(); ExpectedDataTypeIterator != expectedDataTypes.end(); ExpectedDataTypeIterator++)
             {
-                //Checkup whether reference still exists
-                //#TODO
-                //std::shared_ptr<Interface::UpstreamDataType> ExpectedDataTypeSharedBond;
-                //ExpectedDataTypeSharedBond = ExpectedDataTypeIterator->lock();
-
-                //if reference exists, and message type is correct
 
                 if(ExpectedDataTypeIterator->get()->getProtocolIdentificator() == batchMessageType)
                 {
@@ -58,7 +50,7 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
                                                                                  data.begin() + byteProcessed + batchMessageLength));
                     ExpectedDataTypeIterator->get()->doTheProcessing();
 
-                    //ROSClient.publishData(*ExpectedDataTypeIterator->get());
+                    ROSClient->publishData(*ExpectedDataTypeIterator->get());
                 }
             }
 

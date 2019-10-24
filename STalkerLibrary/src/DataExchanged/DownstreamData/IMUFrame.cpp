@@ -6,6 +6,7 @@
 Interface::DownstreamData::IMUFrame::IMUFrame()
 {
     potocolIndentificator = "IMUFrame";
+    stIdentifier = 0x08;
 }
 
 Interface::DownstreamData::IMUFrame::~IMUFrame()
@@ -18,7 +19,7 @@ std::vector<uint8_t> Interface::DownstreamData::IMUFrame::serialize()
     std::vector<uint8_t> output(3);
 
 
-    output[0] = 0x08;//ID
+    output[0] = stIdentifier;
     output[1] = registryAddress;
     output[2] = registryValue;
 

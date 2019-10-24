@@ -7,27 +7,37 @@ int main(int argc, char **argv)
 
     ros::init(argc, argv, "STalker");
 
-   //OSInterface::ROSInterfaceClient rosClient;
-
-    std::unique_ptr<STInterface::STInterfaceClient> stClient;
+    std::shared_ptr<ROSInterface::ROSInterfaceClient> rosClient;
+    std::shared_ptr<STInterface::STInterfaceClient> stClient;
 
     try
     {
-        stClient = std::make_unique<STInterface::STInterfaceClient>(boost::asio::ip::tcp::v4(),1228);
+        stClient = std::make_shared<STInterface::STInterfaceClient>(boost::asio::ip::tcp::v4(), 1238, "localhost", "34567");
     }
     catch (const boost::exception& e)
     {
         std::string diag = diagnostic_information(e);
-        ROS_FATAL("Bad IMU frame received. Boost says: %s", diag.c_str());
+        ROS_FATAL("Exception received during STInterface creation: %s", diag.c_str());
         return 0;
     }
 
-//    std::unique_ptr<Interface::DownstreamData::IMUFrame> imuFrame(new Interface::DownstreamData::IMUFrame);
-//    rosClient.addExpectedDataType(std::move(imuFrame));
-//    std::unique_ptr<Interface::DownstreamData::MovementFrame> movementFrame(new Interface::DownstreamData::MovementFrame);
-//    rosClient.addExpectedDataType(std::move(movementFrame));
-//    std::unique_ptr<Interface::DownstreamData::TimerConfigurationFrame> timerConfigurationFrame(new Interface::DownstreamData::TimerConfigurationFrame);
-//    rosClient.addExpectedDataType(std::move(timerConfigurationFrame));
+    try
+    {
+                rosClient = std::make_shared<ROSInterface::ROSInterfaceClient>();
+    }
+    catch (const std::exception e)
+    {
+
+        ROS_FATAL("Exception received during ROSInterface creation");
+        return 0;
+    }
+
+    std::unique_ptr<Interface::DownstreamData::IMUFrame> imuFrame(new Interface::DownstreamData::IMUFrame);
+    rosClient->addExpectedDataType(std::move(imuFrame));
+    std::unique_ptr<Interface::DownstreamData::MovementFrameTurnPropulsion> movementFrame(new Interface::DownstreamData::MovementFrameTurnPropulsion);
+    rosClient->addExpectedDataType(std::move(movementFrame));
+    std::unique_ptr<Interface::DownstreamData::TimerConfigurationFrame> timerConfigurationFrame(new Interface::DownstreamData::TimerConfigurationFrame);
+    rosClient->addExpectedDataType(std::move(timerConfigurationFrame));
 
     std::unique_ptr<Interface::UpstreamData::AccelerometerFrame>accelerometerFrame(new Interface::UpstreamData::AccelerometerFrame);
     stClient->addExpectedDataType(std::move(accelerometerFrame));

@@ -6,7 +6,10 @@
 #include "../DataExchanged/UpstreamDataType.h"
 #include "../ROSInterface/ROSInterfaceClient.h"
 
-//using namespace ROSInterface;
+namespace ROSInterface
+{
+    class ROSInterfaceClient;
+}
 
 namespace STInterface
 {
@@ -22,11 +25,11 @@ public:
 
     void start();
     void addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType);
-    //void setROSInterface(ROSInterface::ROSInterfaceClient& client);
+    void setROSInterface(std::shared_ptr<ROSInterface::ROSInterfaceClient> client);
 
 private:
 
-    //ROSInterface::ROSInterfaceClient& client;
+    std::shared_ptr<ROSInterface::ROSInterfaceClient> ROSClient;
     void handleRead(const boost::system::error_code& error, size_t bytes_transferred);
     void handleWrite(const boost::system::error_code& error);
 
