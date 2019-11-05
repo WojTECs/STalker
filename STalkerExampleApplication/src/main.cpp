@@ -6,13 +6,14 @@ int main(int argc, char **argv)
 {
 
     ros::init(argc, argv, "STalker");
+    ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug);
 
     std::shared_ptr<ROSInterface::ROSInterfaceClient> rosClient;
     std::shared_ptr<STInterface::STInterfaceClient> stClient;
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClient>(boost::asio::ip::tcp::v4(), 1238, "localhost", "34567");
+        stClient = std::make_shared<STInterface::STInterfaceClient>(boost::asio::ip::tcp::v4(), 1111, "192.168.1.10", "7");//192.168.1.10", "7");
     }
     catch (const boost::exception& e)
     {
@@ -23,7 +24,7 @@ int main(int argc, char **argv)
 
     try
     {
-                rosClient = std::make_shared<ROSInterface::ROSInterfaceClient>();
+        rosClient = std::make_shared<ROSInterface::ROSInterfaceClient>();
     }
     catch (const std::exception e)
     {
@@ -32,9 +33,14 @@ int main(int argc, char **argv)
         return 0;
     }
 
+
+
+    stClient->setROSInterface(rosClient);
+    rosClient->setSTInterface(stClient);
+
     std::unique_ptr<Interface::DownstreamData::IMUFrame> imuFrame(new Interface::DownstreamData::IMUFrame);
     rosClient->addExpectedDataType(std::move(imuFrame));
-    std::unique_ptr<Interface::DownstreamData::MovementFrameTurnPropulsion> movementFrame(new Interface::DownstreamData::MovementFrameTurnPropulsion);
+    std::unique_ptr<Interface::DownstreamData::MovementOrderTurnPropulsionFrame> movementFrame(new Interface::DownstreamData::MovementOrderTurnPropulsionFrame);
     rosClient->addExpectedDataType(std::move(movementFrame));
     std::unique_ptr<Interface::DownstreamData::TimerConfigurationFrame> timerConfigurationFrame(new Interface::DownstreamData::TimerConfigurationFrame);
     rosClient->addExpectedDataType(std::move(timerConfigurationFrame));
@@ -49,7 +55,7 @@ int main(int argc, char **argv)
     stClient->addExpectedDataType(std::move(gyroscopeFrame));
     std::unique_ptr<Interface::UpstreamData::MagnetometerFrame>magnetometerFrame(new Interface::UpstreamData::MagnetometerFrame);
     stClient->addExpectedDataType(std::move(magnetometerFrame));
-    std::unique_ptr<Interface::UpstreamData::PWMFrame>pwmFrame(new Interface::UpstreamData::PWMFrame);
+    std::unique_ptr<Interface::UpstreamData::MovementInformationTurnPropulsionFrame>pwmFrame(new Interface::UpstreamData::MovementInformationTurnPropulsionFrame);
     stClient->addExpectedDataType(std::move(pwmFrame));
     std::unique_ptr<Interface::UpstreamData::TimersFrame>timersFrame(new Interface::UpstreamData::TimersFrame);
     stClient->addExpectedDataType(std::move(timersFrame));

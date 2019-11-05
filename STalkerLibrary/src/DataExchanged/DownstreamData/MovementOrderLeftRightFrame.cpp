@@ -1,21 +1,21 @@
-#include "MovementFrameLeftRight.h"
+#include "MovementOrderLeftRightFrame.h"
 
 #include <boost/exception/diagnostic_information.hpp>
 #include <ros/console.h>
 
-Interface::DownstreamData::MovementFrameLeftRight::MovementFrameLeftRight()
+Interface::DownstreamData::MovementOrderLeftRightFrame::MovementOrderLeftRightFrame()
 {
     potocolIndentificator = "MovementFrame";
 }
 
-Interface::DownstreamData::MovementFrameLeftRight::~MovementFrameLeftRight()
+Interface::DownstreamData::MovementOrderLeftRightFrame::~MovementOrderLeftRightFrame()
 {
 
 }
 
-std::vector<uint8_t> Interface::DownstreamData::MovementFrameLeftRight::serialize()
+std::vector<uint8_t> Interface::DownstreamData::MovementOrderLeftRightFrame::serialize()
 {
-    std::vector<uint8_t> output(6);
+    std::vector<uint8_t> output(7);
 
     output[0] = 0x04;//ID
     output[1] = leftDirection << 4 || rightDirection;
@@ -23,11 +23,12 @@ std::vector<uint8_t> Interface::DownstreamData::MovementFrameLeftRight::serializ
     output[3] = leftSidePWM & 0xFF;
     output[4] = rightSidePWM >> 8;
     output[5] = rightSidePWM & 0xFF;
+    output[6] = timeToDrive >> 8;
 
     return output;
 }
 
-void Interface::DownstreamData::MovementFrameLeftRight::deserialize(boost::property_tree::ptree& pt)
+void Interface::DownstreamData::MovementOrderLeftRightFrame::deserialize(boost::property_tree::ptree& pt)
 {
     try
     {
@@ -35,6 +36,7 @@ void Interface::DownstreamData::MovementFrameLeftRight::deserialize(boost::prope
         rightDirection = pt.get<int>("MovementFrameLeftRight.rightDirection");
         leftSidePWM = pt.get<int>("MovementFrameLeftRight.leftSidePWM");
         rightSidePWM = pt.get<int>("MovementFrameLeftRight.rightSidePWM");
+        timeToDrive = pt.get<int>("MovementFrameTurnPropulsion.timeToDrive");
 
     }
     catch (const boost::exception& e)
@@ -44,7 +46,7 @@ void Interface::DownstreamData::MovementFrameLeftRight::deserialize(boost::prope
     }
 }
 
-void Interface::DownstreamData::MovementFrameLeftRight::doTheProcessing()
+void Interface::DownstreamData::MovementOrderLeftRightFrame::doTheProcessing()
 {
 
 }

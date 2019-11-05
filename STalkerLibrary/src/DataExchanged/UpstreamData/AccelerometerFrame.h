@@ -1,5 +1,8 @@
 #pragma once
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 #include "../UpstreamDataType.h"
 
 namespace Interface
@@ -13,10 +16,10 @@ private:
 
     struct Dataset
     {
-        int xAxis;
-        int yAxis;
-        int zAxis;
-        int timestamp;
+        int16_t xAxis;
+        int16_t yAxis;
+        int16_t zAxis;
+        uint timestamp;
     };
 
     std::vector<Dataset> datasets;
@@ -27,7 +30,7 @@ public:
     virtual ~AccelerometerFrame();
 
     void deserialize(std::vector<uint8_t> iDataStream) override;
-    boost::property_tree::ptree serialize() override;
+    std::string serialize() override;
     void doTheProcessing() override;
     std::unique_ptr<Interface::UpstreamDataType> getClone();
 

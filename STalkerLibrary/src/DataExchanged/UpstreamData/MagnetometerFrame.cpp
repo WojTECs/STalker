@@ -7,6 +7,7 @@ Interface::UpstreamData::MagnetometerFrame::MagnetometerFrame()
 {
     protocolIndentificator = uint8_t{0x06};
     datasetBinarySize = 10;
+    rosTopic = "MagnetometerFrame";
 }
 
 Interface::UpstreamData::MagnetometerFrame::~MagnetometerFrame()
@@ -50,7 +51,7 @@ void Interface::UpstreamData::MagnetometerFrame::deserialize(std::vector<uint8_t
     }
 }
 
-boost::property_tree::ptree Interface::UpstreamData::MagnetometerFrame::serialize()
+std::string Interface::UpstreamData::MagnetometerFrame::serialize()
 {
     boost::property_tree::ptree output;
     boost::property_tree::ptree jsonDatasets;
@@ -68,17 +69,31 @@ boost::property_tree::ptree Interface::UpstreamData::MagnetometerFrame::serializ
 
     output.add_child("MagnetometerFrames", jsonDatasets);
 
-    return output;
+    std::ostringstream pTreeToStringCatalizator;
+    boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, output);
+    return pTreeToStringCatalizator.str();
 }
 
 void Interface::UpstreamData::MagnetometerFrame::doTheProcessing()
 {
-
+    for(int i = 0; i < datasets.size(); i++)
+    {
+        //tranforming on mG - miligauss using board xnucleo iks01a3
+        //multipliers are derived from internal board settings for magnetometer with +-50G max range
+        datasets[i].xAxis=datasets[i].xAxis * 1.5;
+        datasets[i].yAxis=datasets[i].yAxis * 1.5;
+        datasets[i].zAxis=datasets[i].zAxis * 1.5;
+    }
 }
 
 std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::MagnetometerFrame::getClone()
 {
     std::unique_ptr<Interface::UpstreamData::MagnetometerFrame>magnetometerFrame(new Interface::UpstreamData::MagnetometerFrame);
+
+    magnetometerFrame->protocolIndentificator = protocolIndentificator;
+    magnetometerFrame->datasetBinarySize = datasetBinarySize;
+    magnetometerFrame->rosTopic = rosTopic;
+
     return std::move(magnetometerFrame);
 
 }

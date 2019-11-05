@@ -10,13 +10,22 @@ namespace Interface
 
 namespace UpstreamData
 {
-class GPSFrame : public Interface::UpstreamDataType
+class MovementInformationTurnPropulsionFrame : public Interface::UpstreamDataType
 {
 private:
+
+    uint8_t turnDirection;
+    uint8_t propulsionDirection;
+    uint8_t howManyQueued;
+
+    uint16_t turnValue;
+    uint16_t propulsionValue;
+    uint32_t remainedTimeToDrive;
+
 public:
 
-    GPSFrame();
-    virtual ~GPSFrame();
+    MovementInformationTurnPropulsionFrame();
+    virtual ~MovementInformationTurnPropulsionFrame();
 
     void deserialize(std::vector<uint8_t> iDataStream) override;
     std::string  serialize() override;
@@ -26,6 +35,5 @@ public:
 };
 }
 }
-
 
 

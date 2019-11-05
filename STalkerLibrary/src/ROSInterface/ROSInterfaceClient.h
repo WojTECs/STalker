@@ -29,7 +29,9 @@ private:
     ros::Subscriber subscriber;
 
     ros::AsyncSpinner spinner;
-    static ros::Publisher chatter_pub;
+
+    std::map<std::string, ros::Publisher> rosPublishers;
+    std::map<std::string, ros::Publisher>::iterator rosPublisherIndex;
 
 public:
     void setSTInterface(std::shared_ptr<STInterface::STInterfaceClient> client);
@@ -39,7 +41,7 @@ public:
     //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
     void clear();
     void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
-    void publishData(Interface::UpstreamDataType& iData);
+    void publishData(std::string iData, std::string rosTopic);
 
     ROSInterfaceClient();
     virtual ~ROSInterfaceClient();

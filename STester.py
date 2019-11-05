@@ -9,7 +9,7 @@
 import socket
 
 host = 'localhost'
-port = 1228                 # The same port as used by the server skt.send('\x12\r')
+port = 1112                 # The same port as used by the server skt.send('\x12\r')
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 #what frames to test
@@ -27,7 +27,9 @@ testEncoder = False
 
 if testAll or testMultiframe :
     s.connect((host, port))
-    #Accellerometer frame with 30 bytes of 3 datasets 2B xAxis + 2B yAxis + 2B zAxis + 4B timestamp and Gyroscope frame with 30 bytes of 3 datasets 2B xAxis + 2B yAxis + 2B zAxis + 4B timestamp
+    #Accellerometer frame with 30 bytes of 3 datasets 2B xAxis + 2B yAxis + 2B zAxis + 4B timestamp and 
+    #Gyroscope frame with 30 bytes of 3 datasets 2B xAxis + 2B yAxis + 2B zAxis + 4B timestamp
+    #then Accellerometer again
     s.sendall(   b'\x04\x1e'
                 +b'\x01\x01\x02\x01\x03\x03\x0a\x0b\x0c\x0d'
                 +b'\x01\x02\x02\x01\x03\x03\x0a\x0b\x0c\x0d'

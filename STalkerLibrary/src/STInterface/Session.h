@@ -36,7 +36,7 @@ private:
     std::list<std::unique_ptr<Interface::UpstreamDataType>> expectedDataTypes;
 
     boost::asio::ip::tcp::socket socket;
-    enum { max_length = 1024 };
+    enum { max_length = 2048 };
     char rawSocketData[max_length];
 };
 

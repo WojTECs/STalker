@@ -1,5 +1,8 @@
 #pragma once
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
 #include "../UpstreamDataType.h"
 
 namespace Interface
@@ -20,7 +23,7 @@ public:
     virtual ~EncoderFrame();
 
     void deserialize(std::vector<uint8_t> iDataStream) override;
-    boost::property_tree::ptree serialize() override;
+    std::string  serialize() override;
     void doTheProcessing() override;
     std::unique_ptr<Interface::UpstreamDataType> getClone();
 

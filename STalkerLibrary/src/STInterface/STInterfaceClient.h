@@ -36,11 +36,15 @@ private:
 
     std::shared_ptr<ROSInterface::ROSInterfaceClient> ROSClient;
 
+    boost::asio::io_service io_service;
+    boost::asio::ip::tcp::resolver resolver;
+    boost::asio::ip::tcp::socket socket;
+    boost::asio::ip::tcp::resolver::query query;
+    boost::asio::ip::tcp::resolver::iterator iterator;
+
     boost::asio::io_service ioService;
     boost::asio::ip::tcp::acceptor acceptor;
 
-    bool continueProcessing;
-    boost::thread* thread;
     std::string stAddress;//STM ip address
     std::string stPort;//STM receiving port
     void read(boost::asio::ip::tcp::socket & socket);

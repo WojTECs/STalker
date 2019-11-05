@@ -10,16 +10,24 @@ namespace Interface
 
 namespace UpstreamData
 {
-class TimersFrame : public Interface::UpstreamDataType
+class MovementInformationLeftRightFrame : public Interface::UpstreamDataType
 {
 private:
+
+    int rightTurnDirection;
+    int leftTurnDirection;
+
+    int rightTurnValue;
+    int leftTurnValue;
+    int remainedTimeToDrive;
+
 public:
 
-    TimersFrame();
-    virtual ~TimersFrame();
+    MovementInformationLeftRightFrame();
+    virtual ~MovementInformationLeftRightFrame();
 
     void deserialize(std::vector<uint8_t> iDataStream) override;
-    std::string serialize() override;
+    std::string  serialize() override;
     void doTheProcessing() override;
     std::unique_ptr<Interface::UpstreamDataType> getClone();
 

@@ -7,10 +7,6 @@
 
 #include "../STInterface/STInterfaceClient.h"
 
-
-ros::Publisher ROSInterface::ROSInterfaceClient::chatter_pub = ros::Publisher();
-
-
 void ROSInterface::ROSInterfaceClient::setSTInterface(std::shared_ptr<STInterface::STInterfaceClient> client)
 {
     STClient = client;
@@ -59,23 +55,30 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
     }
 }
 
-void ROSInterface::ROSInterfaceClient::publishData(Interface::UpstreamDataType& iData)
-{
-    std::ostringstream pTreeToStringCatalizator;
-    boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, iData.serialize());
+void ROSInterface::ROSInterfaceClient::publishData(std::string iData, std::string rosTopic)
+{    
 
     std_msgs::String message;
-    message.data  = pTreeToStringCatalizator.str();
+    message.data  = iData;
 
-    ROSInterface::ROSInterfaceClient::chatter_pub.publish(message);
+    //Publisher for this topic isn't created yet
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::String>(rosTopic, 1000);
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(message);
+    }
+
+
 }
 
 ROSInterface::ROSInterfaceClient::ROSInterfaceClient() :  spinner(0)
 {
-    ros::NodeHandle nodeHandle;
-    ROSInterface::ROSInterfaceClient::chatter_pub = nodeHandle.advertise<std_msgs::String>("STalkerOut", 1000);
-
-    subscriber = nodeHandle.subscribe("STalkerIn", 1000, &ROSInterface::ROSInterfaceClient::receiveMessageCallback,this);
+    subscriber = nodeHandle.subscribe("STalkerIn", 1000, &ROSInterface::ROSInterfaceClient::receiveMessageCallback, this);
     spinner.start();
 
     ROS_INFO("ROS Interface Client created");
@@ -85,8 +88,3 @@ ROSInterface::ROSInterfaceClient::~ROSInterfaceClient()
 {
 
 }
-
-
-
-
-

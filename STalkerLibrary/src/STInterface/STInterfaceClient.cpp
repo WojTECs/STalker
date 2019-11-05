@@ -14,9 +14,23 @@
 STInterface::STInterfaceClient::STInterfaceClient(boost::asio::ip::tcp iConnectionType, unsigned short iPort, std::string stAddress, std::string stPort)
     : acceptor(ioService, boost::asio::ip::tcp::endpoint(iConnectionType, iPort )),
       stAddress(stAddress),
-      stPort(stPort)
+      stPort(stPort),
+      resolver(io_service),
+      socket(io_service),
+      query(boost::asio::ip::tcp::v4(), stAddress.c_str(), stPort)
 {
     ROS_INFO("ST Interface Client created");
+    iterator = resolver.resolve(query);
+    try
+    {
+        boost::asio::connect(socket, iterator);
+    }
+    catch (const boost::exception& e)
+    {
+        std::string diag = diagnostic_information(e);
+        ROS_ERROR("ST Connection error. Boost says: %s", diag.c_str());
+    }
+
 }
 
 void STInterface::STInterfaceClient::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
@@ -44,27 +58,23 @@ void STInterface::STInterfaceClient::run()
 
 void STInterface::STInterfaceClient::publishData(Interface::DownstreamDataType& iData)
 {
-    //#TODO : avoid recreation of sockets all the time - needs bigger infrastructure changes
-    boost::asio::io_service io_service;
-    boost::asio::ip::tcp::resolver resolver(io_service);
-    boost::asio::ip::tcp::socket socket(io_service);
-    boost::asio::ip::tcp::resolver::query query(boost::asio::ip::tcp::v4(), stAddress.c_str(), stPort);
-    boost::asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
-    try
-    {
-        boost::asio::connect(socket, iterator);
-    }
-    catch (const boost::exception& e)
-    {
-        std::string diag = diagnostic_information(e);
-        ROS_ERROR("ST Connection error. Boost says: %s", diag.c_str());
-    }
+
 
     boost::system::error_code error;
     boost::asio::write( socket, boost::asio::buffer(iData.serialize()), error );
     if(error)
     {
         ROS_ERROR("ST tcp write error. Boost error message is: %s", std::string(error.message()).c_str());
+        iterator = resolver.resolve(query);
+        try
+        {
+            boost::asio::connect(socket, iterator);
+        }
+        catch (const boost::exception& e)
+        {
+            std::string diag = diagnostic_information(e);
+            ROS_ERROR("ST Connection error. Boost says: %s", diag.c_str());
+        }
     }
 }
 

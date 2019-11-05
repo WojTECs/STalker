@@ -8,7 +8,7 @@ namespace DownstreamData
 {
 
 //This message type is used for SWORD and RAPTOR remotely controlled platforms and those that have separate turn and propulsion servo
-class MovementFrameLeftRight : public Interface::DownstreamDataType
+class MovementOrderLeftRightFrame : public Interface::DownstreamDataType
 {
 private:
 
@@ -18,10 +18,12 @@ private:
     int leftSidePWM;
     int rightSidePWM;
 
+    int timeToDrive;
+
 public:
 
-    MovementFrameLeftRight();
-    virtual ~MovementFrameLeftRight();
+    MovementOrderLeftRightFrame();
+    virtual ~MovementOrderLeftRightFrame();
 
     std::vector<uint8_t> serialize();
     void deserialize(boost::property_tree::ptree& pt);
