@@ -52,25 +52,26 @@ void Interface::UpstreamData::AccelerometerFrame::deserialize(std::vector<uint8_
 
 std::string Interface::UpstreamData::AccelerometerFrame::serialize()
 {
-    boost::property_tree::ptree output;
-    boost::property_tree::ptree jsonDatasets;
-    boost::property_tree::ptree jsonDataset;
+//    boost::property_tree::ptree output;
+//    boost::property_tree::ptree jsonDatasets;
+//    boost::property_tree::ptree jsonDataset;
 
-    for(auto const& dataset: datasets)
-    {
-        jsonDataset.put("xAxis", dataset.xAxis);
-        jsonDataset.put("yAxis", dataset.yAxis);
-        jsonDataset.put("zAxis", dataset.zAxis);
-        jsonDataset.put("timestamp", dataset.timestamp);
+//    for(auto const& dataset: datasets)
+//    {
+//        jsonDataset.put("xAxis", dataset.xAxis);
+//        jsonDataset.put("yAxis", dataset.yAxis);
+//        jsonDataset.put("zAxis", dataset.zAxis);
+//        jsonDataset.put("timestamp", dataset.timestamp);
 
-        jsonDatasets.push_back(std::make_pair("", jsonDataset));
-    }
+//        jsonDatasets.push_back(std::make_pair("", jsonDataset));
+//    }
 
-    output.add_child("AccelerometerFrames", jsonDatasets);
+//    output.add_child("AccelerometerFrames", jsonDatasets);
 
-    std::ostringstream pTreeToStringCatalizator;
-    boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, output);
-    return pTreeToStringCatalizator.str();
+//    std::ostringstream pTreeToStringCatalizator;
+//    boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, output);
+//    return pTreeToStringCatalizator.str();
+    return "AccelerometerFrame";
 }
 
 void Interface::UpstreamData::AccelerometerFrame::doTheProcessing()

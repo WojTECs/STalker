@@ -1,5 +1,7 @@
 #include "Session.h"
 
+STInterface::Session::Session(boost::asio::io_service &io_service) : socket(io_service) {}
+
 void STInterface::Session::start()
 {
     socket.async_read_some(boost::asio::buffer(rawSocketData, max_length),
@@ -11,7 +13,13 @@ void STInterface::Session::start()
 void STInterface::Session::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
 {
 
-    expectedDataTypes.push_back(std::move(iExpectedDataType));
+    //expectedDataTypes.push_back(std::move(iExpectedDataType));
+
+    if(expectedDataTypesRegistry[iExpectedDataType->getProtocolIdentificator()]==nullptr)
+    {
+        ROS_WARN("Error during enlisting new message type. This message ID is already occupied!");
+    }
+    expectedDataTypesRegistry[iExpectedDataType->getProtocolIdentificator()] = std::move(iExpectedDataType);
     ROS_DEBUG("STInterface session enlisted new data type");
 }
 
@@ -27,11 +35,8 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
         std::vector<uint8_t> data(rawSocketData, rawSocketData + bytesTransferred);
         int byteProcessed = 0;
 
-        while(byteProcessed != bytesTransferred && bytesTransferred >= 2)
+        while(byteProcessed < bytesTransferred && bytesTransferred >= 2)
         {
-            if(byteProcessed > bytesTransferred)
-                ROS_ERROR("CRITICAL! Value describing Byte processed got bigger than bytes transferred");
-
             //reading first byte of a batch describing message type
             uint8_t batchMessageType = data[byteProcessed];
             byteProcessed++;
@@ -40,44 +45,56 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
             uint8_t batchMessageLength = data[byteProcessed];
             byteProcessed++;
 
-            for (auto expectedDataTypeIterator = expectedDataTypes.begin(); expectedDataTypeIterator != expectedDataTypes.end(); expectedDataTypeIterator++)
+//            for (auto expectedDataTypeIterator = expectedDataTypes.begin(); expectedDataTypeIterator != expectedDataTypes.end(); expectedDataTypeIterator++)
+//            {
+
+//                if(expectedDataTypeIterator->get()->getProtocolIdentificator() == batchMessageType)
+//                {
+//                    //pass vector substring of data(of a given type)
+//                    if(byteProcessed + batchMessageLength > bytesTransferred)
+//                    {
+//                        ROS_ERROR("CRITICAL! STalker can't keep up with message processing, one frame is lost.");
+//                        byteProcessed == bytesTransferred;
+//                        break;
+//                    }
+
+//                    expectedDataTypeIterator->get()->deserialize(std::vector<uint8_t>(data.begin() + byteProcessed,
+//                                                                                 data.begin() + byteProcessed + batchMessageLength));
+//                    expectedDataTypeIterator->get()->doTheProcessing();
+
+//                    ROSClient->publishData(expectedDataTypeIterator->get()->serialize(),
+//                                           expectedDataTypeIterator->get()->getRosTopic());
+//                }
+//            }
+
+            //pass vector substring of data(of a given type)
+            if(byteProcessed + batchMessageLength > bytesTransferred)
             {
-
-                if(expectedDataTypeIterator->get()->getProtocolIdentificator() == batchMessageType)
-                {
-                    //pass vector substring of data(of a given type)
-                    if(byteProcessed + batchMessageLength > bytesTransferred)
-                    {
-                        ROS_ERROR("CRITICAL! STalker can't keep up with message processing, one frame is lost.");
-                        byteProcessed == bytesTransferred;
-                        break;
-                    }
-
-                    expectedDataTypeIterator->get()->deserialize(std::vector<uint8_t>(data.begin() + byteProcessed,
-                                                                                 data.begin() + byteProcessed + batchMessageLength));
-                    expectedDataTypeIterator->get()->doTheProcessing();
-
-                    ROSClient->publishData(expectedDataTypeIterator->get()->serialize(),
-                                           expectedDataTypeIterator->get()->getRosTopic());
-                }
+                ROS_ERROR("CRITICAL! STalker can't keep up with message processing, one frame is lost.");
+                break;
             }
+
+            if(expectedDataTypesRegistry[batchMessageType]==nullptr)
+            {
+                ROS_ERROR("Message buffer is getting full and one message got split apart, or bad message identifier was received.");
+                break;
+            }
+
+            expectedDataTypesRegistry[batchMessageType]->deserialize(std::vector<uint8_t>(data.begin() + byteProcessed,
+                                                                         data.begin() + byteProcessed + batchMessageLength));
+            expectedDataTypesRegistry[batchMessageType]->doTheProcessing();
+
+            ROSClient->publishData(expectedDataTypesRegistry[batchMessageType]->serialize(),
+                                   expectedDataTypesRegistry[batchMessageType]->getRosTopic());
 
             //moving processing index on the first byte of a next batch
             byteProcessed += batchMessageLength;
         }
 
-//NOTICE!!! If you want the server to send some reply, comment out code below, and uncomment async_write function call
         socket.async_read_some(boost::asio::buffer(rawSocketData, max_length),
                                 boost::bind(&Session::handleRead, this,
                                             boost::asio::placeholders::error,
                                             boost::asio::placeholders::bytes_transferred));
-
-//UNCOMMENT BELOW
-//
-//        boost::asio::async_write(socket,//#TODO - change data sent in the response
-//                                 boost::asio::buffer(rawSocketData, bytesTransferred),
-//                                 boost::bind(&Session::handleWrite, this,
-//                                             boost::asio::placeholders::error));
     }
     else
     {

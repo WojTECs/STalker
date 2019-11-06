@@ -18,7 +18,7 @@ class Session
 {
 public:
 
-    Session(boost::asio::io_service& io_service) : socket(io_service) {}
+    Session(boost::asio::io_service& io_service);
     virtual ~Session() {}
 
     boost::asio::ip::tcp::socket& getSocket() { return socket; }
@@ -33,10 +33,10 @@ private:
     void handleRead(const boost::system::error_code& error, size_t bytes_transferred);
     void handleWrite(const boost::system::error_code& error);
 
-    std::list<std::unique_ptr<Interface::UpstreamDataType>> expectedDataTypes;
+    std::unique_ptr<Interface::UpstreamDataType> expectedDataTypesRegistry[256];
 
     boost::asio::ip::tcp::socket socket;
-    enum { max_length = 2048 };
+    enum { max_length = 8000 };
     char rawSocketData[max_length];
 };
 
