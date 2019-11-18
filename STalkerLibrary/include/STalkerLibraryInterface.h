@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../src/STInterface/STInterfaceClient.h"
+#include "../src/STInterface/STInterfaceClientUDP.h"
+#include "../src/STInterface/STInterfaceClientTCP.h"
 #include "../src/ROSInterface/ROSInterfaceClient.h"
 
 #include "../src/DataExchanged/DownstreamData/IMUFrame.h"

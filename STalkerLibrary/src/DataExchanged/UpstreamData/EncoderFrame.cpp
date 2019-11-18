@@ -15,16 +15,16 @@ Interface::UpstreamData::EncoderFrame::~EncoderFrame()
 }
 
 
-void Interface::UpstreamData::EncoderFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::EncoderFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-    if(iDataStream.size() != datasetBinarySize)
+    if(iDataSize != datasetBinarySize)
     {
         ROS_ERROR("Bad Encoder frame received. Length is mismatching");
         return;
     }
 
-    leftSideSpinCount = (iDataStream.at(0)<<8)+iDataStream.at(1);
-    rightSideSpinCount = (iDataStream.at(2)<<8)+iDataStream.at(3);
+    leftSideSpinCount = (iDataStream[0]<<8)+iDataStream[1];
+    rightSideSpinCount = (iDataStream[2]<<8)+iDataStream[3];
 }
 
 std::string Interface::UpstreamData::EncoderFrame::serialize()

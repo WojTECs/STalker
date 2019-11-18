@@ -9,11 +9,11 @@ int main(int argc, char **argv)
     ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug);
 
     std::shared_ptr<ROSInterface::ROSInterfaceClient> rosClient;
-    std::shared_ptr<STInterface::STInterfaceClient> stClient;
+    std::shared_ptr<STInterface::STInterfaceClientUDP> stClient;
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClient>(boost::asio::ip::tcp::v4(), 1111, "192.168.1.10", "7");//192.168.1.10", "7");
+        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.1.10", "7");//192.168.1.10", "7");
     }
     catch (const boost::exception& e)
     {
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
 
     stClient->setROSInterface(rosClient);
-    rosClient->setSTInterface(stClient);
+    rosClient->setSTUDPInterface(stClient);
 
     std::unique_ptr<Interface::DownstreamData::IMUFrame> imuFrame(new Interface::DownstreamData::IMUFrame);
     rosClient->addExpectedDataType(std::move(imuFrame));

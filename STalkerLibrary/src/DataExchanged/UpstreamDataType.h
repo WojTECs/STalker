@@ -28,7 +28,7 @@ public:
     std::string getRosTopic()const{ return rosTopic;}
     void setRosTopic(std::string topic){rosTopic=topic;}
 
-    virtual void deserialize(std::vector<uint8_t> iDataStream)=0;
+    virtual void deserialize(const char* iDataStream, const int iDataSize)=0;
     virtual std::string serialize()=0;
     virtual void doTheProcessing()=0;
 

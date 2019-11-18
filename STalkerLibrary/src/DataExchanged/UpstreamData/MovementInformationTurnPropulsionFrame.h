@@ -27,7 +27,7 @@ public:
     MovementInformationTurnPropulsionFrame();
     virtual ~MovementInformationTurnPropulsionFrame();
 
-    void deserialize(std::vector<uint8_t> iDataStream) override;
+    void deserialize(const char* iDataStream, const int iDataSize) override;
     std::string  serialize() override;
     void doTheProcessing() override;
     std::unique_ptr<Interface::UpstreamDataType> getClone();

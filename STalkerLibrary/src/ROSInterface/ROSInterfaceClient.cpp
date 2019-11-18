@@ -5,11 +5,15 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <ros/console.h>
 
-#include "../STInterface/STInterfaceClient.h"
 
-void ROSInterface::ROSInterfaceClient::setSTInterface(std::shared_ptr<STInterface::STInterfaceClient> client)
+void ROSInterface::ROSInterfaceClient::setSTTCPInterface(std::shared_ptr<STInterface::STInterfaceClientTCP> client)
 {
-    STClient = client;
+    STTCPClient = client;
+}
+
+void ROSInterface::ROSInterfaceClient::setSTUDPInterface(std::shared_ptr<STInterface::STInterfaceClientUDP> client)
+{
+    STUDPClient = client;
 }
 
 void ROSInterface::ROSInterfaceClient::addExpectedDataType(std::unique_ptr<Interface::DownstreamDataType> iExpectedDataType)
@@ -50,7 +54,7 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
             ExpectedDataTypeIterator->get()->deserialize(pt);
             ExpectedDataTypeIterator->get()->doTheProcessing();
 
-            STClient->publishData(*ExpectedDataTypeIterator->get());
+            STTCPClient->publishData(*ExpectedDataTypeIterator->get());
         }
     }
 }

@@ -14,21 +14,21 @@ Interface::UpstreamData::MovementInformationTurnPropulsionFrame::~MovementInform
 
 }
 
-void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-    if(iDataStream.size() != datasetBinarySize)
+    if(iDataSize != datasetBinarySize)
     {
         ROS_ERROR("Bad PWM frame received. Length is mismatched");
         return;
     }
 
-    turnDirection = iDataStream.at(0) >> 4;
-    propulsionDirection = iDataStream.at(0) & 0x0F;
+    turnDirection = iDataStream[0] >> 4;
+    propulsionDirection = iDataStream[0] & 0x0F;
 
-    turnValue = (iDataStream.at(1)<<8)+iDataStream.at(2);
-    propulsionValue = (iDataStream.at(3)<<8)+iDataStream.at(4);
-    remainedTimeToDrive = (iDataStream.at(5)<<8)+iDataStream.at(6);
-    howManyQueued = iDataStream.at(7);
+    turnValue = (iDataStream[1]<<8)+iDataStream[2];
+    propulsionValue = (iDataStream[3]<<8)+iDataStream[4];
+    remainedTimeToDrive = (iDataStream[5]<<8)+iDataStream[6];
+    howManyQueued = iDataStream[7];
 }
 
 std::string Interface::UpstreamData::MovementInformationTurnPropulsionFrame::serialize()

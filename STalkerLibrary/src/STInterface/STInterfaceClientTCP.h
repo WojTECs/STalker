@@ -25,7 +25,7 @@ namespace STInterface
 namespace STInterface
 {
 
-class STInterfaceClient
+class STInterfaceClientTCP
 {
 private:
 
@@ -47,8 +47,6 @@ private:
 
     std::string stAddress;//STM ip address
     std::string stPort;//STM receiving port
-    void read(boost::asio::ip::tcp::socket & socket);
-    void send(boost::asio::ip::tcp::socket & socket, const std::string& message);
     void start_accept();
     void handle_accept(Session* new_session, const boost::system::error_code& error);
 
@@ -61,8 +59,8 @@ public:
     void run();
     void publishData(Interface::DownstreamDataType& iData);
 
-    STInterfaceClient(boost::asio::ip::tcp iConnectionType, unsigned short iPort, std::string stAddress, std::string stPort);
-    virtual ~STInterfaceClient() {}
+    STInterfaceClientTCP(unsigned short iPort, std::string stAddress, std::string stPort);
+    virtual ~STInterfaceClientTCP() {}
 
 };
 

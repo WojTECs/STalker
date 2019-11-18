@@ -14,8 +14,7 @@ void STInterface::Session::addExpectedDataType(std::unique_ptr<Interface::Upstre
 {
 
     //expectedDataTypes.push_back(std::move(iExpectedDataType));
-
-    if(expectedDataTypesRegistry[iExpectedDataType->getProtocolIdentificator()]==nullptr)
+    if(expectedDataTypesRegistry[iExpectedDataType->getProtocolIdentificator()]!=nullptr)
     {
         ROS_WARN("Error during enlisting new message type. This message ID is already occupied!");
     }
@@ -32,40 +31,18 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
 {
     if (!error)
     {
-        std::vector<uint8_t> data(rawSocketData, rawSocketData + bytesTransferred);
+        //std::vector<uint8_t> data(rawSocketData, rawSocketData + bytesTransferred);
         int byteProcessed = 0;
 
         while(byteProcessed < bytesTransferred && bytesTransferred >= 2)
         {
             //reading first byte of a batch describing message type
-            uint8_t batchMessageType = data[byteProcessed];
+            uint8_t batchMessageType = rawSocketData[byteProcessed];
             byteProcessed++;
 
             //reading first byte of a batch describing batch length expressed by a number of bytes following
-            uint8_t batchMessageLength = data[byteProcessed];
+            uint8_t batchMessageLength = rawSocketData[byteProcessed];
             byteProcessed++;
-
-//            for (auto expectedDataTypeIterator = expectedDataTypes.begin(); expectedDataTypeIterator != expectedDataTypes.end(); expectedDataTypeIterator++)
-//            {
-
-//                if(expectedDataTypeIterator->get()->getProtocolIdentificator() == batchMessageType)
-//                {
-//                    //pass vector substring of data(of a given type)
-//                    if(byteProcessed + batchMessageLength > bytesTransferred)
-//                    {
-//                        ROS_ERROR("CRITICAL! STalker can't keep up with message processing, one frame is lost.");
-//                        byteProcessed == bytesTransferred;
-//                        break;
-//                    }
-
-//                    expectedDataTypeIterator->get()->deserialize(std::vector<uint8_t>(data.begin() + byteProcessed,
-//                                                                                 data.begin() + byteProcessed + batchMessageLength));
-//                    expectedDataTypeIterator->get()->doTheProcessing();
-
-//                    ROSClient->publishData(expectedDataTypeIterator->get()->serialize(),
-//                                           expectedDataTypeIterator->get()->getRosTopic());
-//                }
-//            }
 
             //pass vector substring of data(of a given type)
             if(byteProcessed + batchMessageLength > bytesTransferred)
@@ -80,8 +57,7 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
                 break;
             }
 
-            expectedDataTypesRegistry[batchMessageType]->deserialize(std::vector<uint8_t>(data.begin() + byteProcessed,
-                                                                         data.begin() + byteProcessed + batchMessageLength));
+            expectedDataTypesRegistry[batchMessageType]->deserialize(rawSocketData, batchMessageLength);
             expectedDataTypesRegistry[batchMessageType]->doTheProcessing();
 
             ROSClient->publishData(expectedDataTypesRegistry[batchMessageType]->serialize(),

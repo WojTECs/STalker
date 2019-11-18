@@ -14,20 +14,20 @@ Interface::UpstreamData::MovementInformationLeftRightFrame::~MovementInformation
 
 }
 
-void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-    if(iDataStream.size() != datasetBinarySize)
+    if(iDataSize != datasetBinarySize)
     {
         ROS_ERROR("Bad PWM frame received. Length is mismatched");
         return;
     }
 
-    rightTurnDirection = iDataStream.at(0) >> 4;
-    leftTurnDirection = iDataStream.at(0) & 0x0F;
+    rightTurnDirection = iDataStream[0] >> 4;
+    leftTurnDirection = iDataStream[0] & 0x0F;
 
-    rightTurnValue = (iDataStream.at(1)<<8)+iDataStream.at(2);
-    leftTurnValue = (iDataStream.at(3)<<8)+iDataStream.at(4);
-    remainedTimeToDrive = (iDataStream.at(5)<<8)+iDataStream.at(6);
+    rightTurnValue = (iDataStream[1]<<8)+iDataStream[2];
+    leftTurnValue = (iDataStream[3]<<8)+iDataStream[4];
+    remainedTimeToDrive = (iDataStream[5]<<8)+iDataStream[6];
 }
 
 std::string Interface::UpstreamData::MovementInformationLeftRightFrame::serialize()

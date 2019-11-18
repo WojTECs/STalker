@@ -1,4 +1,4 @@
-#include "STInterfaceClient.h"
+#include "STInterfaceClientTCP.h"
 
 #include <iostream>
 #include <utility>
@@ -11,8 +11,8 @@
 #include "../DataExchanged/UpstreamData/GyroscopeFrame.h"
 
 
-STInterface::STInterfaceClient::STInterfaceClient(boost::asio::ip::tcp iConnectionType, unsigned short iPort, std::string stAddress, std::string stPort)
-    : acceptor(ioService, boost::asio::ip::tcp::endpoint(iConnectionType, iPort )),
+STInterface::STInterfaceClientTCP::STInterfaceClientTCP(unsigned short iPort, std::string stAddress, std::string stPort)
+    : acceptor(ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), iPort )),
       stAddress(stAddress),
       stPort(stPort),
       resolver(io_service),
@@ -33,30 +33,30 @@ STInterface::STInterfaceClient::STInterfaceClient(boost::asio::ip::tcp iConnecti
 
 }
 
-void STInterface::STInterfaceClient::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
+void STInterface::STInterfaceClientTCP::addExpectedDataType(std::unique_ptr<Interface::UpstreamDataType> iExpectedDataType)
 {
     expectedDataTypes.push_back(std::move(iExpectedDataType));
     ROS_DEBUG("ST Interface enlisted new data type");
 }
 
-void STInterface::STInterfaceClient::setROSInterface(std::shared_ptr<ROSInterface::ROSInterfaceClient> client)
+void STInterface::STInterfaceClientTCP::setROSInterface(std::shared_ptr<ROSInterface::ROSInterfaceClient> client)
 {
     ROSClient=client;
 }
 
-void STInterface::STInterfaceClient::clear()
+void STInterface::STInterfaceClientTCP::clear()
 {
     expectedDataTypes.clear();
     ROS_DEBUG("ST Interface cleared expected data types list");
 }
 
-void STInterface::STInterfaceClient::run()
+void STInterface::STInterfaceClientTCP::run()
 {
     start_accept();
     ioService.run();
 }
 
-void STInterface::STInterfaceClient::publishData(Interface::DownstreamDataType& iData)
+void STInterface::STInterfaceClientTCP::publishData(Interface::DownstreamDataType& iData)
 {
 
 
@@ -79,15 +79,15 @@ void STInterface::STInterfaceClient::publishData(Interface::DownstreamDataType& 
 }
 
 
-void STInterface::STInterfaceClient::start_accept()
+void STInterface::STInterfaceClientTCP::start_accept()
 {
     Session* newSession = new Session(ioService);
     acceptor.async_accept(newSession->getSocket(),
-                           boost::bind(&STInterface::STInterfaceClient::handle_accept, this, newSession,
+                           boost::bind(&STInterface::STInterfaceClientTCP::handle_accept, this, newSession,
                                        boost::asio::placeholders::error));
 }
 
-void STInterface::STInterfaceClient::handle_accept(Session* newSession,
+void STInterface::STInterfaceClientTCP::handle_accept(Session* newSession,
                    const boost::system::error_code& error)
 {
     if (!error)

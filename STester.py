@@ -9,8 +9,8 @@
 import socket
 
 host = 'localhost'
-port = 1112                 # The same port as used by the server skt.send('\x12\r')
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+port = 1115                 # The same port as used by the server skt.send('\x12\r')
+
 
 #what frames to test
 testAll = False #stronger than test<specificFrame> vars
@@ -23,6 +23,13 @@ testGyroscope = False
 testMagnetometer = False
 testPWM = False
 testEncoder = False
+useTCP = False #Default UDP
+
+if useTCP :
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+else :
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
 
 
 if testAll or testMultiframe :

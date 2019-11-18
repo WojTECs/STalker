@@ -14,16 +14,16 @@ Interface::UpstreamData::AccelerometerFrame::~AccelerometerFrame()
 
 }
 
-void Interface::UpstreamData::AccelerometerFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::AccelerometerFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-    if(iDataStream.size() % datasetBinarySize != 0)
+    if(iDataSize % datasetBinarySize != 0)
     {
         //TODO - when the frame is being cut by buffers
         ROS_ERROR("Bad Accelerometer frame received: wrong data lenght");
         return;
     }
 
-    int dataCount = iDataStream.size() / datasetBinarySize;
+    int dataCount = iDataSize / datasetBinarySize;
 
     datasets = std::vector<Dataset>(dataCount);
 
@@ -34,44 +34,43 @@ void Interface::UpstreamData::AccelerometerFrame::deserialize(std::vector<uint8_
     {
 
         byteShift = i * datasetBinarySize;
-        datasets[i].xAxis = (iDataStream.at(0 + byteShift)<<8)+
-                iDataStream.at(1 + byteShift);
+        datasets[i].xAxis = (iDataStream[0 + byteShift]<<8)+
+                iDataStream[1 + byteShift];
 
-        datasets[i].yAxis = (iDataStream.at(2 + byteShift)<<8)+
-                iDataStream.at(3 + byteShift);
+        datasets[i].yAxis = (iDataStream[2 + byteShift]<<8)+
+                iDataStream[3 + byteShift];
 
-        datasets[i].zAxis = (iDataStream.at(4 + byteShift)<<8)+
-                iDataStream.at(5 + byteShift);
+        datasets[i].zAxis = (iDataStream[4 + byteShift]<<8)+
+                iDataStream[5 + byteShift];
 
-        datasets[i].timestamp = (iDataStream.at(6 + byteShift)<<24)+
-                (iDataStream.at(7 + byteShift)<<16)+
-                (iDataStream.at(8 + byteShift)<<8)+
-                iDataStream.at(9 + byteShift);
+        datasets[i].timestamp = (iDataStream[6 + byteShift]<<24)+
+                (iDataStream[7 + byteShift]<<16)+
+                (iDataStream[8 + byteShift]<<8)+
+                iDataStream[9 + byteShift];
     }
 }
 
 std::string Interface::UpstreamData::AccelerometerFrame::serialize()
 {
-//    boost::property_tree::ptree output;
-//    boost::property_tree::ptree jsonDatasets;
-//    boost::property_tree::ptree jsonDataset;
+    boost::property_tree::ptree output;
+    boost::property_tree::ptree jsonDatasets;
+    boost::property_tree::ptree jsonDataset;
 
-//    for(auto const& dataset: datasets)
-//    {
-//        jsonDataset.put("xAxis", dataset.xAxis);
-//        jsonDataset.put("yAxis", dataset.yAxis);
-//        jsonDataset.put("zAxis", dataset.zAxis);
-//        jsonDataset.put("timestamp", dataset.timestamp);
+    for(auto const& dataset: datasets)
+    {
+        jsonDataset.put("xAxis", dataset.xAxis);
+        jsonDataset.put("yAxis", dataset.yAxis);
+        jsonDataset.put("zAxis", dataset.zAxis);
+        jsonDataset.put("timestamp", dataset.timestamp);
 
-//        jsonDatasets.push_back(std::make_pair("", jsonDataset));
-//    }
+        jsonDatasets.push_back(std::make_pair("", jsonDataset));
+    }
 
-//    output.add_child("AccelerometerFrames", jsonDatasets);
+    output.add_child("AccelerometerFrames", jsonDatasets);
 
-//    std::ostringstream pTreeToStringCatalizator;
-//    boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, output);
-//    return pTreeToStringCatalizator.str();
-    return "AccelerometerFrame";
+    std::ostringstream pTreeToStringCatalizator;
+    boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, output);
+    return pTreeToStringCatalizator.str();
 }
 
 void Interface::UpstreamData::AccelerometerFrame::doTheProcessing()

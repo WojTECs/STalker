@@ -8,11 +8,13 @@
 
 #include "../DataExchanged/DownstreamDataType.h"
 #include "../DataExchanged/UpstreamDataType.h"
-#include "../STInterface/STInterfaceClient.h"
+#include "../STInterface/STInterfaceClientTCP.h"
+#include "../STInterface/STInterfaceClientUDP.h"
 
 namespace STInterface
 {
-    class STInterfaceClient;
+    class STInterfaceClientTCP;
+    class STInterfaceClientUDP;
 }
 
 namespace ROSInterface
@@ -22,7 +24,8 @@ class ROSInterfaceClient
 {
 private:
 
-    std::shared_ptr<STInterface::STInterfaceClient> STClient;
+    std::shared_ptr<STInterface::STInterfaceClientTCP> STTCPClient;
+    std::shared_ptr<STInterface::STInterfaceClientUDP> STUDPClient;
     std::list<std::unique_ptr<Interface::DownstreamDataType>> expectedDataTypes;
 
     ros::NodeHandle nodeHandle;
@@ -34,7 +37,8 @@ private:
     std::map<std::string, ros::Publisher>::iterator rosPublisherIndex;
 
 public:
-    void setSTInterface(std::shared_ptr<STInterface::STInterfaceClient> client);
+    void setSTTCPInterface(std::shared_ptr<STInterface::STInterfaceClientTCP> client);
+    void setSTUDPInterface(std::shared_ptr<STInterface::STInterfaceClientUDP> client);
 
     //Adds >>REFERENCE<< for the object in the internal list of expected data types.
     void addExpectedDataType(std::unique_ptr<Interface::DownstreamDataType> iExpectedDataType);

@@ -12,7 +12,7 @@ Interface::UpstreamData::TimersFrame::~TimersFrame()
 
 }
 
-void Interface::UpstreamData::TimersFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::TimersFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
 
 }

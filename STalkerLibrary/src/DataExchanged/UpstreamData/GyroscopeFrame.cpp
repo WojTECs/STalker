@@ -14,16 +14,16 @@ Interface::UpstreamData::GyroscopeFrame::~GyroscopeFrame()
 
 }
 
-void Interface::UpstreamData::GyroscopeFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::GyroscopeFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
 
-    if(iDataStream.size() % datasetBinarySize != 0)
+    if(iDataSize % datasetBinarySize != 0)
     {
         ROS_ERROR("Bad Gyroscope frame received. Lenght is mismatched");
         return;
     }
 
-    int dataCount = iDataStream.size() / datasetBinarySize;
+    int dataCount = iDataSize / datasetBinarySize;
 
     datasets = std::vector<Dataset>(dataCount);
 
@@ -34,19 +34,19 @@ void Interface::UpstreamData::GyroscopeFrame::deserialize(std::vector<uint8_t> i
     {
 
         byteShift = i * datasetBinarySize;
-        datasets[i].xAxis = (iDataStream.at(0 + byteShift)<<8)+
-                iDataStream.at(1 + byteShift);
+        datasets[i].xAxis = (iDataStream[0 + byteShift]<<8)+
+                iDataStream[1 + byteShift];
 
-        datasets[i].yAxis = (iDataStream.at(2 + byteShift)<<8)+
-                iDataStream.at(3 + byteShift);
+        datasets[i].yAxis = (iDataStream[2 + byteShift]<<8)+
+                iDataStream[3 + byteShift];
 
-        datasets[i].zAxis = (iDataStream.at(4 + byteShift)<<8)+
-                iDataStream.at(5 + byteShift);
+        datasets[i].zAxis = (iDataStream[4 + byteShift]<<8)+
+                iDataStream[5 + byteShift];
 
-        datasets[i].timestamp = (iDataStream.at(6 + byteShift)<<24)+
-                (iDataStream.at(7 + byteShift)<<16)+
-                (iDataStream.at(8 + byteShift)<<8)+
-                iDataStream.at(9 + byteShift);
+        datasets[i].timestamp = (iDataStream[6 + byteShift]<<24)+
+                (iDataStream[7 + byteShift]<<16)+
+                (iDataStream[8 + byteShift]<<8)+
+                iDataStream[9 + byteShift];
     }
 }
 

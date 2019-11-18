@@ -14,7 +14,7 @@ Interface::UpstreamData::GPSFrame::~GPSFrame()
 
 }
 
-void Interface::UpstreamData::GPSFrame::deserialize(std::vector<uint8_t> iDataStream)
+void Interface::UpstreamData::GPSFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
 
 }
