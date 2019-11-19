@@ -14,6 +14,7 @@ set(ARCHITECTURE x86_64-linux-gnu)
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 #set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+SET(CMAKE_CXX_FLAGS -pthread)
 
 message(STATUS "Setting build type - ${CMAKE_BUILD_TYPE}")
 
