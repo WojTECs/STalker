@@ -23,8 +23,8 @@ target_link_libraries(STalkerApplicationExample PRIVATE STalkerLibrary
     /opt/ros/melodic/lib/librostime.so
     /opt/ros/melodic/lib/librospack.so
     /opt/ros/melodic/lib/libroscpp_serialization.so
-    /usr/lib/x86_64-linux-gnu/libboost_system.so
-    /usr/lib/x86_64-linux-gnu/libboost_thread.so)
+    /usr/lib/${ARCHITECTURE}/libboost_system.so
+    /usr/lib/${ARCHITECTURE}/libboost_thread.so)
 
 
 

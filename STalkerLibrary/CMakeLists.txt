@@ -28,6 +28,6 @@ target_include_directories(STalkerLibrary
 target_link_libraries(STalkerLibrary PRIVATE
     /opt/ros/melodic/lib/libroscpp.so
     /opt/ros/melodic/lib/librosconsole.so
-    /usr/lib/x86_64-linux-gnu/libboost_system.so
-    /usr/lib/x86_64-linux-gnu/libboost_thread.so
+    /usr/lib/${ARCHITECTURE}/libboost_system.so
+    /usr/lib/${ARCHITECTURE}/libboost_thread.so
     Threads::Threads)
