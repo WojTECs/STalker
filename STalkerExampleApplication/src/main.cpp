@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.1.10", "7");//192.168.1.10", "7");
+        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(22336, "192.168.1.10", "7");//192.168.1.10", "7");
     }
     catch (const boost::exception& e)
     {

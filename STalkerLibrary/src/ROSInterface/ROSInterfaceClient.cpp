@@ -53,8 +53,8 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
         {
             ExpectedDataTypeIterator->get()->deserialize(pt);
             ExpectedDataTypeIterator->get()->doTheProcessing();
-
-            STTCPClient->publishData(*ExpectedDataTypeIterator->get());
+            //#TODO switch interface type
+            STUDPClient->publishData(*ExpectedDataTypeIterator->get());
         }
     }
 }
