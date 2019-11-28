@@ -8,8 +8,10 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug FORCE)
 endif()
 
-set(ARCHITECTURE x86_64-linux-gnu)
+
+set(ARCHITECTURE aarch64-linux-gnu)
 #set(ARCHITECTURE arm-linux-gnueabihf)
+#set(ARCHITECTURE x86_64-linux-gnu)
 
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 #set(CMAKE_CXX_FLAGS_DEBUG "-g")
