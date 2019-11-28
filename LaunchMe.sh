@@ -1,4 +1,6 @@
 #/bin/bash
 source /opt/ros/melodic/setup.bash
-roscore & ./STalkerExampleApplication/STalkerApplicationExample
- 
+killall roscore
+killall STalkerApplicationExample
+sleep 5 && ./STalkerExampleApplication/STalkerApplicationExample &
+roscore
