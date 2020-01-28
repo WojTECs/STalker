@@ -5,7 +5,7 @@
 Interface::UpstreamData::EncoderFrame::EncoderFrame()
 {
     protocolIndentificator = uint8_t{0x07};
-    datasetBinarySize = 4;
+    datasetBinarySize = 17;
     rosTopic = "EncoderFrame";
 }
 
@@ -23,19 +23,44 @@ void Interface::UpstreamData::EncoderFrame::deserialize(const char *iDataStream,
         return;
     }
 
-    leftSideSpinCount = (iDataStream[0]<<8)+iDataStream[1];
-    rightSideSpinCount = (iDataStream[2]<<8)+iDataStream[3];
+    leftRotationDirection = (iDataStream[0]>>4);
+    rightRotationDirection = (iDataStream[0]) & 0xF;
+
+    leftSideVelocity.array[3] = iDataStream[1];
+    leftSideVelocity.array[2] = iDataStream[2];
+    leftSideVelocity.array[1] = iDataStream[3];
+    leftSideVelocity.array[0] = iDataStream[4];
+
+    leftSideDistance.array[3] = iDataStream[5];
+    leftSideDistance.array[2] = iDataStream[6];
+    leftSideDistance.array[1] = iDataStream[7];
+    leftSideDistance.array[0] = iDataStream[8];
+
+    rightSideVelocity.array[3] = iDataStream[9];
+    rightSideVelocity.array[2] = iDataStream[10];
+    rightSideVelocity.array[1] = iDataStream[11];
+    rightSideVelocity.array[0] = iDataStream[12];
+
+    rightSideDistance.array[3] = iDataStream[13];
+    rightSideDistance.array[2] = iDataStream[14];
+    rightSideDistance.array[1] = iDataStream[15];
+    rightSideDistance.array[0] = iDataStream[16];
+
 }
 
 std::string Interface::UpstreamData::EncoderFrame::serialize()
 {
     boost::property_tree::ptree output;
-    boost::property_tree::ptree pwmData;
+    boost::property_tree::ptree encoderData;
 
-    pwmData.put("LeftSideSpinCount", leftSideSpinCount);
-    pwmData.put("RightSideSpinCount", rightSideSpinCount);
+    encoderData.put("leftRotationDirection", leftRotationDirection);
+    encoderData.put("rightRotationDirection", rightRotationDirection);
+    encoderData.put("leftSideVelocity", leftSideVelocity.value);
+    encoderData.put("rightSideVelocity", rightSideVelocity.value);
+    encoderData.put("leftSideVelocity", leftSideVelocity.value);
+    encoderData.put("rightSideVelocity", rightSideVelocity.value);
 
-    output.add_child("EncoderFrame", pwmData);
+    output.add_child("EncoderFrame", encoderData);
 
     std::ostringstream pTreeToStringCatalizator;
     boost::property_tree::json_parser::write_json(pTreeToStringCatalizator, output);

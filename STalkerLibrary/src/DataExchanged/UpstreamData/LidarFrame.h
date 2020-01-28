@@ -10,28 +10,24 @@ namespace Interface
 
 namespace UpstreamData
 {
-union floatUnion {
-    float value;
-    uint8_t array[sizeof(float)];
-};
 
-class EncoderFrame : public Interface::UpstreamDataType
+
+class LidarFrame : public Interface::UpstreamDataType
 {
+    union floatUnion {
+        float value;
+        uint8_t array[sizeof(float)];
+    };
 private:
 
-    uint8_t leftRotationDirection;
-    uint8_t rightRotationDirection;
-    
-    floatUnion leftSideVelocity;
-    floatUnion rightSideVelocity;
-    
-    floatUnion leftSideDistance;
-    floatUnion rightSideDistance;
+    uint16_t distance;
+    uint16_t signalStrength;
+    uint8_t lidarMode;
 
 public:
 
-    EncoderFrame();
-    virtual ~EncoderFrame();
+    LidarFrame();
+    virtual ~LidarFrame();
 
     void deserialize(const char* iDataStream, const int iDataSize) override;
     std::string  serialize() override;

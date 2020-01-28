@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(22336, "192.168.1.10", "7");//192.168.1.10", "7");
+        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.1.10", "7");//192.168.1.10", "7");
     }
     catch (const boost::exception& e)
     {
@@ -53,12 +53,16 @@ int main(int argc, char **argv)
     stClient->addExpectedDataType(std::move(gpsFrame));
     std::unique_ptr<Interface::UpstreamData::GyroscopeFrame>gyroscopeFrame(new Interface::UpstreamData::GyroscopeFrame);
     stClient->addExpectedDataType(std::move(gyroscopeFrame));
+    std::unique_ptr<Interface::UpstreamData::LidarFrame>lidarFrame(new Interface::UpstreamData::LidarFrame);
+    stClient->addExpectedDataType(std::move(lidarFrame));
     std::unique_ptr<Interface::UpstreamData::MagnetometerFrame>magnetometerFrame(new Interface::UpstreamData::MagnetometerFrame);
     stClient->addExpectedDataType(std::move(magnetometerFrame));
     std::unique_ptr<Interface::UpstreamData::MovementInformationTurnPropulsionFrame>pwmFrame(new Interface::UpstreamData::MovementInformationTurnPropulsionFrame);
     stClient->addExpectedDataType(std::move(pwmFrame));
     std::unique_ptr<Interface::UpstreamData::TimersFrame>timersFrame(new Interface::UpstreamData::TimersFrame);
     stClient->addExpectedDataType(std::move(timersFrame));
+    std::unique_ptr<Interface::UpstreamData::TimeSyncFrame>timeSyncFrame(new Interface::UpstreamData::TimeSyncFrame);
+    stClient->addExpectedDataType(std::move(timeSyncFrame));
 
     stClient->run();
 

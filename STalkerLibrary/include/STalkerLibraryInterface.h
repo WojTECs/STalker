@@ -14,6 +14,8 @@
 #include "../src/DataExchanged/UpstreamData/EncoderFrame.h"
 #include "../src/DataExchanged/UpstreamData/GPSFrame.h"
 #include "../src/DataExchanged/UpstreamData/GyroscopeFrame.h"
+#include "../src/DataExchanged/UpstreamData/LidarFrame.h"
 #include "../src/DataExchanged/UpstreamData/MagnetometerFrame.h"
 #include "../src/DataExchanged/UpstreamData/MovementInformationTurnPropulsionFrame.h"
 #include "../src/DataExchanged/UpstreamData/TimersFrame.h"
+#include "../src/DataExchanged/UpstreamData/TimeSyncFrame.h"

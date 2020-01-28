@@ -10,28 +10,18 @@ namespace Interface
 
 namespace UpstreamData
 {
-union floatUnion {
-    float value;
-    uint8_t array[sizeof(float)];
-};
 
-class EncoderFrame : public Interface::UpstreamDataType
+class TimeSyncFrame : public Interface::UpstreamDataType
 {
+
 private:
 
-    uint8_t leftRotationDirection;
-    uint8_t rightRotationDirection;
-    
-    floatUnion leftSideVelocity;
-    floatUnion rightSideVelocity;
-    
-    floatUnion leftSideDistance;
-    floatUnion rightSideDistance;
+    uint32_t timeSync;
 
 public:
 
-    EncoderFrame();
-    virtual ~EncoderFrame();
+    TimeSyncFrame();
+    virtual ~TimeSyncFrame();
 
     void deserialize(const char* iDataStream, const int iDataSize) override;
     std::string  serialize() override;

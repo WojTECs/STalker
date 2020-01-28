@@ -2,12 +2,12 @@ project(STalkerLibrary)
 
 #Some people say that GLOB is a bad practice cuz after git pull you have to rerun cmake
 # but I don't think it's a big problem. And CMAke is cleaner for sure
-file(GLOB_RECURSE lib1_SOURCES
+file(GLOB_RECURSE LIB_SOURCES
         "*.h"
         "*.cpp"
 )
 
-add_library(STalkerLibrary SHARED ${lib1_SOURCES})
+add_library(STalkerLibrary SHARED ${LIB_SOURCES})
 
 target_compile_options(STalkerLibrary PRIVATE -Werror)
 target_compile_features(STalkerLibrary PRIVATE cxx_std_17)
