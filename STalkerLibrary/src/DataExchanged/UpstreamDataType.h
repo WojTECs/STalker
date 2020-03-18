@@ -6,6 +6,16 @@
 #include <boost/property_tree/ptree.hpp>
 #include <ros/console.h>
 
+#include <ros/console.h>
+
+#include "../ROSInterface/ROSInterfaceClient.h"
+
+
+namespace ROSInterface
+{
+    class ROSInterfaceClient;
+}
+
 namespace Interface
 {
 
@@ -27,6 +37,8 @@ public:
 
     std::string getRosTopic()const{ return rosTopic;}
     void setRosTopic(std::string topic){rosTopic=topic;}
+
+    virtual void sendData(ROSInterface::ROSInterfaceClient& ROSClient);
 
     virtual void deserialize(const char* iDataStream, const int iDataSize)=0;
     virtual std::string serialize()=0;

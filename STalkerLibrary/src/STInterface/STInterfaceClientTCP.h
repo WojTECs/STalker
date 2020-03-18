@@ -22,6 +22,11 @@ namespace STInterface
     class Session;
 }
 
+namespace Interface
+{
+    class UpstreamDataType;
+}
+
 namespace STInterface
 {
 

@@ -17,17 +17,18 @@ namespace ROSInterface
     class ROSInterfaceClient;
 }
 
+namespace Interface
+{
+    class UpstreamDataType;
+}
+
 namespace STInterface
 {
-
     class Session;
 
 class STInterfaceClientUDP
 {
 private:
-
-    // sword raptor pirate
-    //#TODO - dodanie nowego message'a dla pbl i Ziembinskiego pirate4wd
 
     std::unique_ptr<Interface::UpstreamDataType> expectedDataTypesRegistry[256];
 

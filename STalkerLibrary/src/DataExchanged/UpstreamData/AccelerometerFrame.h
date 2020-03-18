@@ -26,6 +26,8 @@ private:
 
 public:
 
+    void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
+
     AccelerometerFrame();
     virtual ~AccelerometerFrame();
 

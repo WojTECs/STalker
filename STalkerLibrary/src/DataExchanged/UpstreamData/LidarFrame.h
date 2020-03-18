@@ -29,6 +29,7 @@ public:
     LidarFrame();
     virtual ~LidarFrame();
 
+    void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
     void deserialize(const char* iDataStream, const int iDataSize) override;
     std::string  serialize() override;
     void doTheProcessing() override;

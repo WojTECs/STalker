@@ -30,6 +30,8 @@ private:
 
 public:
 
+    void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
+
     EncoderFrame();
     virtual ~EncoderFrame();
 

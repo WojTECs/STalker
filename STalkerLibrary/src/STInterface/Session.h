@@ -11,6 +11,11 @@ namespace ROSInterface
     class ROSInterfaceClient;
 }
 
+namespace Interface
+{
+    class UpstreamDataType;
+}
+
 namespace STInterface
 {
 

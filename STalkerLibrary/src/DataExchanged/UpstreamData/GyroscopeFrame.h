@@ -26,6 +26,8 @@ private:
 
 public:
 
+    void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
+
     GyroscopeFrame();
     virtual ~GyroscopeFrame();
 

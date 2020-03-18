@@ -14,6 +14,21 @@ Interface::UpstreamData::MovementInformationTurnPropulsionFrame::~MovementInform
 
 }
 
+void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+
+    std_msgs::Int32MultiArray array;
+
+    array.data.push_back(turnDirection);
+    array.data.push_back(propulsionDirection);
+    array.data.push_back(turnValue);
+    array.data.push_back(propulsionValue);
+    array.data.push_back(remainedTimeToDrive);
+    array.data.push_back(howManyQueued);
+
+    ROSClient.publishInt32Array(array, rosTopic);
+}
+
 void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)

@@ -2,9 +2,14 @@
 
 #include <vector>
 #include <memory>
+#include <iostream>
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/Int32MultiArray.h"
+#include "std_msgs/UInt32.h"
+#include "sensor_msgs/NavSatFix.h"
 
 #include "../DataExchanged/DownstreamDataType.h"
 #include "../DataExchanged/UpstreamDataType.h"
@@ -45,7 +50,17 @@ public:
     //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
     void clear();
     void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
-    void publishData(std::string iData, std::string rosTopic);
+    void publishString(std::string iData, std::string rosTopic);
+
+    void test(int test)
+    {
+        std::cout<<"TEEEEEEEEEST"<<test;
+    }
+
+    void publishFloat64Array(std_msgs::Float64MultiArray array, std::string rosTopic);
+    void publishInt32Array(std_msgs::Int32MultiArray array, std::string rosTopic);
+    void publishUInt32(std_msgs::UInt32 input, std::string rosTopic);
+    void publishNavSatFix(sensor_msgs::NavSatFix input, std::string rosTopic);
 
     ROSInterfaceClient();
     virtual ~ROSInterfaceClient();

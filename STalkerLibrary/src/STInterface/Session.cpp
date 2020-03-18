@@ -60,7 +60,7 @@ void STInterface::Session::handleRead(const boost::system::error_code& error, si
             expectedDataTypesRegistry[batchMessageType]->deserialize(rawSocketData, batchMessageLength);
             expectedDataTypesRegistry[batchMessageType]->doTheProcessing();
 
-            ROSClient->publishData(expectedDataTypesRegistry[batchMessageType]->serialize(),
+            ROSClient->publishString(expectedDataTypesRegistry[batchMessageType]->serialize(),
                                    expectedDataTypesRegistry[batchMessageType]->getRosTopic());
 
             //moving processing index on the first byte of a next batch

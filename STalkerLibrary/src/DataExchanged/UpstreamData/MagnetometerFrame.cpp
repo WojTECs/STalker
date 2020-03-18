@@ -10,6 +10,20 @@ Interface::UpstreamData::MagnetometerFrame::MagnetometerFrame()
     rosTopic = "MagnetometerFrame";
 }
 
+void Interface::UpstreamData::MagnetometerFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+    for(auto const& dataset: datasets)
+    {
+        std_msgs::Float64MultiArray array;
+        array.data.push_back(dataset.xAxis);
+        array.data.push_back(dataset.yAxis);
+        array.data.push_back(dataset.zAxis);
+        array.data.push_back(dataset.timestamp);
+
+        ROSClient.publishFloat64Array(array, rosTopic);
+    }
+}
+
 Interface::UpstreamData::MagnetometerFrame::~MagnetometerFrame()
 {
 

@@ -14,6 +14,15 @@ Interface::UpstreamData::TimeSyncFrame::~TimeSyncFrame()
 
 }
 
+void Interface::UpstreamData::TimeSyncFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+
+    std_msgs::UInt32 data;
+
+    data.data = timeSync;
+
+    ROSClient.publishUInt32(data, rosTopic);
+}
 
 void Interface::UpstreamData::TimeSyncFrame::deserialize(const char *iDataStream, const int iDataSize)
 {

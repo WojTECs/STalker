@@ -1,6 +1,22 @@
 #include "AccelerometerFrame.h"
 
+#include "std_msgs/Float64MultiArray.h"
+
 #include <ros/console.h>
+
+void Interface::UpstreamData::AccelerometerFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+    for(auto const& dataset: datasets)
+    {
+        std_msgs::Float64MultiArray array;
+        array.data.push_back(dataset.xAxis);
+        array.data.push_back(dataset.yAxis);
+        array.data.push_back(dataset.zAxis);
+        array.data.push_back(dataset.timestamp);
+
+        ROSClient.publishFloat64Array(array, rosTopic);
+    }
+}
 
 Interface::UpstreamData::AccelerometerFrame::AccelerometerFrame()
 {

@@ -14,6 +14,18 @@ Interface::UpstreamData::LidarFrame::~LidarFrame()
 
 }
 
+void Interface::UpstreamData::LidarFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+
+    std_msgs::Int32MultiArray array;
+
+    array.data.push_back(distance);
+    array.data.push_back(signalStrength);
+    array.data.push_back(lidarMode);
+
+    ROSClient.publishInt32Array(array, rosTopic);
+}
+
 
 void Interface::UpstreamData::LidarFrame::deserialize(const char *iDataStream, const int iDataSize)
 {

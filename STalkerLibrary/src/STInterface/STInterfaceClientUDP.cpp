@@ -62,7 +62,6 @@ void STInterface::STInterfaceClientUDP::doReceive()
       {
         if (!error && bytesTransferred > 0)
         {
-            //std::vector<uint8_t> data(rawSocketData, rawSocketData + bytesTransferred);
             int byteProcessed = 0;
 
             while(byteProcessed < bytesTransferred && bytesTransferred >= 2)
@@ -91,8 +90,9 @@ void STInterface::STInterfaceClientUDP::doReceive()
                 expectedDataTypesRegistry[batchMessageType]->deserialize(rawSocketData + byteProcessed, batchMessageLength);
                 expectedDataTypesRegistry[batchMessageType]->doTheProcessing();
 
-                ROSClient->publishData(expectedDataTypesRegistry[batchMessageType]->serialize(),
-                                       expectedDataTypesRegistry[batchMessageType]->getRosTopic());
+                expectedDataTypesRegistry[batchMessageType]->sendData(*ROSClient);
+                //ROSClient->publishString(expectedDataTypesRegistry[batchMessageType]->serialize(),
+                //                       expectedDataTypesRegistry[batchMessageType]->getRosTopic());
 
                 //moving processing index on the first byte of a next batch
                 byteProcessed += batchMessageLength;

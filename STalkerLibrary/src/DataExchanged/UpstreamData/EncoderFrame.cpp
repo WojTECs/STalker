@@ -14,6 +14,27 @@ Interface::UpstreamData::EncoderFrame::~EncoderFrame()
 
 }
 
+void Interface::UpstreamData::EncoderFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+
+    std_msgs::Float64MultiArray array;
+
+    double leftVelocity = leftSideVelocity.value;
+    double rightVelocity = rightSideVelocity.value;
+
+    if(leftRotationDirection == 2)
+        leftVelocity = leftVelocity * (-1);
+
+    if(rightRotationDirection == 2)
+        rightVelocity = rightVelocity * (-1);
+
+    array.data.push_back(leftVelocity);
+    array.data.push_back(rightVelocity);
+    array.data.push_back(leftSideDistance.value);
+    array.data.push_back(rightSideDistance.value);
+
+    ROSClient.publishFloat64Array(array, rosTopic);
+}
 
 void Interface::UpstreamData::EncoderFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
@@ -55,8 +76,6 @@ std::string Interface::UpstreamData::EncoderFrame::serialize()
 
     encoderData.put("leftRotationDirection", leftRotationDirection);
     encoderData.put("rightRotationDirection", rightRotationDirection);
-    encoderData.put("leftSideVelocity", leftSideVelocity.value);
-    encoderData.put("rightSideVelocity", rightSideVelocity.value);
     encoderData.put("leftSideVelocity", leftSideVelocity.value);
     encoderData.put("rightSideVelocity", rightSideVelocity.value);
 

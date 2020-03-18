@@ -15,12 +15,12 @@ port = 1115                 # The same port as used by the server skt.send('\x12
 #what frames to test
 testAll = False #stronger than test<specificFrame> vars
 
-testMultiframe = True
+testMultiframe = False
 
 #vars for separate tests
 testAccellerometer = False
 testGyroscope = False
-testMagnetometer = False
+testMagnetometer = True
 testPWM = False
 testEncoder = False
 useTCP = False #Default UDP
@@ -78,5 +78,5 @@ if testAll or testPWM :
 if testAll or testEncoder :
     s.connect((host, port))
     #Encoder frame with no. of bytes, direction forward and four bytes describing spins on both sides
-    s.sendall(b'\x07\x04\x23\x23\x34\x34')
+    s.sendall(b'\x07\x11\x23\x23\x34\x34\x04\x23\x23\x34\x34\x04\x23\x23\x34\x34\x34\x34\x34')
     s.close()

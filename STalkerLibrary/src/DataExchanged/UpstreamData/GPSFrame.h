@@ -26,6 +26,7 @@ class GPSFrame : public Interface::UpstreamDataType
 private:
 public:
     
+
     uint8_t countOfSatelites;
     floatUnion hdop;//precision coefficient
     doubleUnion latitude;// SI system decimal
@@ -47,6 +48,7 @@ public:
     GPSFrame();
     virtual ~GPSFrame();
 
+    void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
     void deserialize(const char* iDataStream, const int iDataSize) override;
     std::string  serialize() override;
     void doTheProcessing() override;

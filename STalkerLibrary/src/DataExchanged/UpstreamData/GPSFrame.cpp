@@ -9,6 +9,37 @@ Interface::UpstreamData::GPSFrame::GPSFrame()
     rosTopic = "GPSFrame";
 }
 
+void Interface::UpstreamData::GPSFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+
+    std_msgs::Float64MultiArray array;
+    array.data.push_back(countOfSatelites);
+    array.data.push_back(hdop.value);
+    array.data.push_back(latitude.value);
+    array.data.push_back(longitude.value);
+    array.data.push_back(altitude.value);
+    array.data.push_back(speed.value);
+    array.data.push_back(infoAge);
+    array.data.push_back(day);
+    array.data.push_back(month);
+    array.data.push_back(year);
+    array.data.push_back(hour);
+    array.data.push_back(minute);
+    array.data.push_back(second);
+    array.data.push_back(course.value);
+
+    ROSClient.publishFloat64Array(array, rosTopic+"Extended");
+
+    sensor_msgs::NavSatFix navSat;
+
+    navSat.latitude = latitude.value;
+    navSat.longitude = longitude.value;
+    navSat.altitude = altitude.value;
+
+     ROSClient.publishNavSatFix(navSat, rosTopic);
+
+}
+
 Interface::UpstreamData::GPSFrame::~GPSFrame()
 {
 

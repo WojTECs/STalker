@@ -59,7 +59,7 @@ void ROSInterface::ROSInterfaceClient::receiveMessageCallback(const std_msgs::St
     }
 }
 
-void ROSInterface::ROSInterfaceClient::publishData(std::string iData, std::string rosTopic)
+void ROSInterface::ROSInterfaceClient::publishString(std::string iData, std::string rosTopic)
 {    
 
     std_msgs::String message;
@@ -78,6 +78,62 @@ void ROSInterface::ROSInterfaceClient::publishData(std::string iData, std::strin
     }
 
 
+}
+
+void ROSInterface::ROSInterfaceClient::publishFloat64Array(std_msgs::Float64MultiArray array, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::Float64MultiArray>(rosTopic, 1000);
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(array);
+    }
+}
+
+void ROSInterface::ROSInterfaceClient::publishInt32Array(std_msgs::Int32MultiArray array, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::Int32MultiArray>(rosTopic, 1000);
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(array);
+    }
+}
+
+void ROSInterface::ROSInterfaceClient::publishUInt32(std_msgs::UInt32 input, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::UInt32>(rosTopic, 1000);
+
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(input);
+    }
+}
+
+void ROSInterface::ROSInterfaceClient::publishNavSatFix(sensor_msgs::NavSatFix input, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<sensor_msgs::NavSatFix>(rosTopic, 1000);
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(input);
+    }
 }
 
 ROSInterface::ROSInterfaceClient::ROSInterfaceClient() :  spinner(0)

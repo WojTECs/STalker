@@ -23,6 +23,7 @@ public:
     TimeSyncFrame();
     virtual ~TimeSyncFrame();
 
+    void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
     void deserialize(const char* iDataStream, const int iDataSize) override;
     std::string  serialize() override;
     void doTheProcessing() override;
