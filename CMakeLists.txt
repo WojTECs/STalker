@@ -8,15 +8,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug FORCE)
 endif()
 
-
-#set(ARCHITECTURE aarch64-linux-gnu)
-#set(ARCHITECTURE arm-linux-gnueabihf)
-set(ARCHITECTURE x86_64-linux-gnu)
-
-#set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-#set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-SET(CMAKE_CXX_FLAGS -pthread)
+set(CMAKE_THREAD_PREFER_PTHREAD ON)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 message(STATUS "Setting build type - ${CMAKE_BUILD_TYPE}")
 

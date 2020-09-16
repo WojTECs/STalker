@@ -7,10 +7,8 @@
 #include <boost/thread.hpp>
 
 #include "../DataExchanged/DownstreamDataType.h"
-#include "../STInterface/Session.h"
 #include "../DataExchanged/UpstreamDataType.h"
 #include "../ROSInterface/ROSInterfaceClient.h"
-#include "Session.h"
 
 namespace ROSInterface
 {

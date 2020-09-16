@@ -10,22 +10,24 @@ namespace Interface
 
 namespace UpstreamData
 {
-class MovementInformationLeftRightFrame : public Interface::UpstreamDataType
+
+class ServiceTimeFrame : public Interface::UpstreamDataType
 {
+
 private:
 
-    int rightTurnDirection;
-    int leftTurnDirection;
+    uint16_t IMUTime;
+    uint16_t dataSendTime;
+    uint16_t EnkoderTime;
+    uint16_t PWMTime;
+    uint16_t LIDARTime;
+    uint16_t UltrasoundTime;
 
-    int rightTurnValue;
-    int leftTurnValue;
-    int remainedTimeToDrive;
-    int howManyQueued;
 
 public:
 
-    MovementInformationLeftRightFrame();
-    virtual ~MovementInformationLeftRightFrame();
+    ServiceTimeFrame();
+    virtual ~ServiceTimeFrame();
 
     void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
     void deserialize(const char* iDataStream, const int iDataSize) override;
@@ -36,5 +38,6 @@ public:
 };
 }
 }
+
 
 

@@ -1,33 +1,37 @@
 project(STalkerLibrary)
 
-#Some people say that GLOB is a bad practice cuz after git pull you have to rerun cmake
-# but I don't think it's a big problem. And CMAke is cleaner for sure
 file(GLOB_RECURSE LIB_SOURCES
         "*.h"
-        "*.cpp"
-)
+        "*.cpp")
 
 add_library(STalkerLibrary SHARED ${LIB_SOURCES})
-
 target_compile_options(STalkerLibrary PRIVATE -Werror)
-target_compile_features(STalkerLibrary PRIVATE cxx_std_17)
-
-set(CMAKE_THREAD_PREFER_PTHREAD ON)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package(Threads REQUIRED)
+if(Threads_FOUND)
+    target_include_directories(STalkerLibrary PRIVATE ${Threads_INCLUDE_DIRS})
+    target_link_libraries(STalkerLibrary PRIVATE ${Threads_LIBRARIES})
+else()
+    message(FATAL_ERROR "Library 'Threads' couldn't be find.")
+endif()
 
-#Those fixed paths look awful but they're meant for a fixed system(this very virtual machine)
-#it's the simplest sufficient solutin in this case
+find_package(Boost)
+if(Boost_FOUND)
+    target_include_directories(STalkerLibrary PRIVATE ${Boost_INCLUDE_DIRS})
+    target_link_libraries(STalkerLibrary PRIVATE ${Boost_LIBRARIES})
+else()
+    message(FATAL_ERROR "Boost couldn't be find.")
+endif()
+
+find_package(roscpp)
+if(roscpp_FOUND)
+    target_include_directories(STalkerLibrary PRIVATE ${roscpp_INCLUDE_DIRS})
+    target_link_libraries(STalkerLibrary PRIVATE ${roscpp_LIBRARIES})
+else()
+    message(FATAL_ERROR "RosCpp couldn't be find.")
+endif()
+
 target_include_directories(STalkerLibrary
-	PUBLIC include
-	PRIVATE src
-        "/opt/ros/melodic/include/"
+        PUBLIC include
+        PRIVATE src
 )
-
-target_link_libraries(STalkerLibrary PRIVATE
-    /opt/ros/melodic/lib/libroscpp.so
-    /opt/ros/melodic/lib/librosconsole.so
-    /usr/lib/${ARCHITECTURE}/libboost_system.so
-    /usr/lib/${ARCHITECTURE}/libboost_thread.so
-    Threads::Threads)

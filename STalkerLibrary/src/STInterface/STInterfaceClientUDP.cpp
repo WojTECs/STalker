@@ -87,7 +87,7 @@ void STInterface::STInterfaceClientUDP::doReceive()
                     break;
                 }
 
-                expectedDataTypesRegistry[batchMessageType]->deserialize(rawSocketData + byteProcessed, batchMessageLength);
+                expectedDataTypesRegistry[batchMessageType]->deserialize(rawSocketData + byteProcessed, batchMessageLength*expectedDataTypesRegistry[batchMessageType]->getSTBinarySize());
                 expectedDataTypesRegistry[batchMessageType]->doTheProcessing();
 
                 expectedDataTypesRegistry[batchMessageType]->sendData(*ROSClient);
@@ -95,7 +95,8 @@ void STInterface::STInterfaceClientUDP::doReceive()
                 //                       expectedDataTypesRegistry[batchMessageType]->getRosTopic());
 
                 //moving processing index on the first byte of a next batch
-                byteProcessed += batchMessageLength;
+                byteProcessed += batchMessageLength*expectedDataTypesRegistry[batchMessageType]->getSTBinarySize();
+                int b=0;
             }
 
           doReceive();

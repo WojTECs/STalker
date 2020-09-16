@@ -4,7 +4,7 @@
 
 Interface::UpstreamData::TimeSyncFrame::TimeSyncFrame()
 {
-    protocolIndentificator = uint8_t{0x10};
+    protocolIndentificator = uint8_t{0xFF};
     datasetBinarySize = 4;
     rosTopic = "TimeSyncFrame";
 }

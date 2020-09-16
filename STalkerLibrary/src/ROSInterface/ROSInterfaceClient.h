@@ -13,7 +13,6 @@
 
 #include "../DataExchanged/DownstreamDataType.h"
 #include "../DataExchanged/UpstreamDataType.h"
-#include "../STInterface/STInterfaceClientTCP.h"
 #include "../STInterface/STInterfaceClientUDP.h"
 
 namespace STInterface
@@ -51,12 +50,6 @@ public:
     void clear();
     void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
     void publishString(std::string iData, std::string rosTopic);
-
-    void test(int test)
-    {
-        std::cout<<"TEEEEEEEEEST"<<test;
-    }
-
     void publishFloat64Array(std_msgs::Float64MultiArray array, std::string rosTopic);
     void publishInt32Array(std_msgs::Int32MultiArray array, std::string rosTopic);
     void publishUInt32(std_msgs::UInt32 input, std::string rosTopic);

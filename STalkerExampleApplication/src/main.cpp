@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.1.10", "7");//192.168.1.10", "7");
+        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.2.10", "7");
     }
     catch (const boost::exception& e)
     {
@@ -33,8 +33,6 @@ int main(int argc, char **argv)
         return 0;
     }
 
-
-
     stClient->setROSInterface(rosClient);
     rosClient->setSTUDPInterface(stClient);
 
@@ -47,6 +45,12 @@ int main(int argc, char **argv)
 
     std::unique_ptr<Interface::UpstreamData::AccelerometerFrame>accelerometerFrame(new Interface::UpstreamData::AccelerometerFrame);
     stClient->addExpectedDataType(std::move(accelerometerFrame));
+    std::unique_ptr<Interface::UpstreamData::ContinentalLIDARDistanceFrame>continentalLIDARDistanceFrame(new Interface::UpstreamData::ContinentalLIDARDistanceFrame);
+    stClient->addExpectedDataType(std::move(continentalLIDARDistanceFrame));
+    std::unique_ptr<Interface::UpstreamData::ContinentalLIDARReflectionFrame>continentalLIDARReflectionFrame(new Interface::UpstreamData::ContinentalLIDARReflectionFrame);
+    stClient->addExpectedDataType(std::move(continentalLIDARReflectionFrame));
+    std::unique_ptr<Interface::UpstreamData::ContinentalLIDARSpeedFrame>continentalLIDARSpeedFrame(new Interface::UpstreamData::ContinentalLIDARSpeedFrame);
+    stClient->addExpectedDataType(std::move(continentalLIDARSpeedFrame));
     std::unique_ptr<Interface::UpstreamData::EncoderFrame>encoderFrame(new Interface::UpstreamData::EncoderFrame);
     stClient->addExpectedDataType(std::move(encoderFrame));
     std::unique_ptr<Interface::UpstreamData::GPSFrame>gpsFrame(new Interface::UpstreamData::GPSFrame);
@@ -57,8 +61,14 @@ int main(int argc, char **argv)
     stClient->addExpectedDataType(std::move(lidarFrame));
     std::unique_ptr<Interface::UpstreamData::MagnetometerFrame>magnetometerFrame(new Interface::UpstreamData::MagnetometerFrame);
     stClient->addExpectedDataType(std::move(magnetometerFrame));
-    std::unique_ptr<Interface::UpstreamData::MovementInformationTurnPropulsionFrame>pwmFrame(new Interface::UpstreamData::MovementInformationTurnPropulsionFrame);
+    std::unique_ptr<Interface::UpstreamData::MovementInformationLeftRightFrame>pwmFrame(new Interface::UpstreamData::MovementInformationLeftRightFrame);
     stClient->addExpectedDataType(std::move(pwmFrame));
+    std::unique_ptr<Interface::UpstreamData::PackageStatisticsFrame>packageStatisticsFrame(new Interface::UpstreamData::PackageStatisticsFrame);
+    stClient->addExpectedDataType(std::move(packageStatisticsFrame));
+    std::unique_ptr<Interface::UpstreamData::RFIDFrame>rfidframe(new Interface::UpstreamData::RFIDFrame);
+    stClient->addExpectedDataType(std::move(rfidframe));
+    std::unique_ptr<Interface::UpstreamData::ServiceTimeFrame>serviceTimeFrame(new Interface::UpstreamData::ServiceTimeFrame);
+    stClient->addExpectedDataType(std::move(serviceTimeFrame));
     std::unique_ptr<Interface::UpstreamData::TimersFrame>timersFrame(new Interface::UpstreamData::TimersFrame);
     stClient->addExpectedDataType(std::move(timersFrame));
     std::unique_ptr<Interface::UpstreamData::TimeSyncFrame>timeSyncFrame(new Interface::UpstreamData::TimeSyncFrame);

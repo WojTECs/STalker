@@ -10,22 +10,20 @@ namespace Interface
 
 namespace UpstreamData
 {
-class MovementInformationLeftRightFrame : public Interface::UpstreamDataType
+
+class ContinentalLIDARReflectionFrame : public Interface::UpstreamDataType
 {
+
 private:
 
-    int rightTurnDirection;
-    int leftTurnDirection;
-
-    int rightTurnValue;
-    int leftTurnValue;
-    int remainedTimeToDrive;
-    int howManyQueued;
+    uint16_t leftBeamReflection;
+    uint16_t centralBeamReflection;
+    uint16_t rightBeamReflection;
 
 public:
 
-    MovementInformationLeftRightFrame();
-    virtual ~MovementInformationLeftRightFrame();
+    ContinentalLIDARReflectionFrame();
+    virtual ~ContinentalLIDARReflectionFrame();
 
     void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
     void deserialize(const char* iDataStream, const int iDataSize) override;
@@ -36,5 +34,6 @@ public:
 };
 }
 }
+
 
 

@@ -34,9 +34,9 @@ void Interface::UpstreamData::LidarFrame::deserialize(const char *iDataStream, c
         ROS_ERROR("Bad Lidar frame received. Length is mismatching");
         return;
     }
-    uint16_t distance = iDataStream[0]<<8 | iDataStream[1];
-    uint16_t signalStrength = iDataStream[2]<<8 | iDataStream[3];
-    uint8_t lidarMode = iDataStream[4];
+    distance = iDataStream[0]<<8 | iDataStream[1];
+    signalStrength = iDataStream[2]<<8 | iDataStream[3];
+    lidarMode = iDataStream[4];
 
 }
 

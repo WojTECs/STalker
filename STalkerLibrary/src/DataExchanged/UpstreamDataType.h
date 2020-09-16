@@ -38,7 +38,7 @@ public:
     std::string getRosTopic()const{ return rosTopic;}
     void setRosTopic(std::string topic){rosTopic=topic;}
 
-    virtual void sendData(ROSInterface::ROSInterfaceClient& ROSClient);
+    virtual void sendData(ROSInterface::ROSInterfaceClient& ROSClient)=0;
 
     virtual void deserialize(const char* iDataStream, const int iDataSize)=0;
     virtual std::string serialize()=0;

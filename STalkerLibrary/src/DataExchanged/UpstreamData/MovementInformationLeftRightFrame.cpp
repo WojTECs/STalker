@@ -5,7 +5,7 @@
 Interface::UpstreamData::MovementInformationLeftRightFrame::MovementInformationLeftRightFrame()
 {
     protocolIndentificator = uint8_t{0x02};
-    datasetBinarySize = 7;
+    datasetBinarySize = 8;
     rosTopic = "MovmentInformation";
 }
 
@@ -16,11 +16,6 @@ Interface::UpstreamData::MovementInformationLeftRightFrame::~MovementInformation
 
 void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-    if(iDataSize != datasetBinarySize)
-    {
-        ROS_ERROR("Bad PWM frame received. Length is mismatched");
-        return;
-    }
 
     rightTurnDirection = iDataStream[0] >> 4;
     leftTurnDirection = iDataStream[0] & 0x0F;
@@ -28,6 +23,7 @@ void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(con
     rightTurnValue = (iDataStream[1]<<8)+iDataStream[2];
     leftTurnValue = (iDataStream[3]<<8)+iDataStream[4];
     remainedTimeToDrive = (iDataStream[5]<<8)+iDataStream[6];
+    howManyQueued = iDataStream[7];
 }
 
 std::string Interface::UpstreamData::MovementInformationLeftRightFrame::serialize()
@@ -39,7 +35,8 @@ std::string Interface::UpstreamData::MovementInformationLeftRightFrame::serializ
     pwmData.put("LeftTurnDirection", leftTurnDirection);
     pwmData.put("RrightTurnValue", rightTurnValue);
     pwmData.put("LeftTurnValue", leftTurnValue);
-    pwmData.put("remainedTimeToDrive", remainedTimeToDrive);
+    pwmData.put("RemainedTimeToDrive", remainedTimeToDrive);
+    pwmData.put("QueueLength", howManyQueued);
 
     output.add_child("MovmentInformationFrame", pwmData);
 
@@ -63,4 +60,19 @@ std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::MovementIn
 
     return std::move(pwmFrame);
 
+}
+
+void Interface::UpstreamData::MovementInformationLeftRightFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
+{
+
+    std_msgs::Int32MultiArray array;
+
+    array.data.push_back(rightTurnDirection);
+    array.data.push_back(leftTurnDirection);
+    array.data.push_back(rightTurnValue);
+    array.data.push_back(leftTurnValue);
+    array.data.push_back(remainedTimeToDrive);
+    array.data.push_back(howManyQueued);
+
+    ROSClient.publishInt32Array(array, rosTopic);
 }
