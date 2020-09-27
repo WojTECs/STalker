@@ -6,7 +6,7 @@ Interface::UpstreamData::MovementInformationLeftRightFrame::MovementInformationL
 {
     protocolIndentificator = uint8_t{0x02};
     datasetBinarySize = 8;
-    rosTopic = "MovmentInformation";
+    rosTopic = "MovementInformationFrame";
 }
 
 Interface::UpstreamData::MovementInformationLeftRightFrame::~MovementInformationLeftRightFrame()

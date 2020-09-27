@@ -3,7 +3,10 @@
 #include "../src/STInterface/STInterfaceClientUDP.h"
 #include "../src/ROSInterface/ROSInterfaceClient.h"
 
-#include "../src/DataExchanged/DownstreamData/IMUFrame.h"
+#include "../src/DataExchanged/DownstreamData/AccelerometerFrame.h"
+#include "../src/DataExchanged/DownstreamData/ElectromagnesFrame.h"
+#include "../src/DataExchanged/DownstreamData/GyroscopeFrame.h"
+#include "../src/DataExchanged/DownstreamData/MagnetometerFrame.h"
 #include "../src/DataExchanged/DownstreamData/MainConfigurationFrame.h"
 #include "../src/DataExchanged/DownstreamData/MovementOrderTurnPropulsionFrame.h"
 #include "../src/DataExchanged/DownstreamData/MovementOrderLeftRightFrame.h"

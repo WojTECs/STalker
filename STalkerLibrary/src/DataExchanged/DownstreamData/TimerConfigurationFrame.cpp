@@ -7,7 +7,7 @@
 Interface::DownstreamData::TimerConfigurationFrame::TimerConfigurationFrame()
 {
     potocolIndentificator = "TimerConfigurationFrame";
-    stIdentifier = 0x06;
+    stIdentifier = 0x03;
 }
 
 Interface::DownstreamData::TimerConfigurationFrame::~TimerConfigurationFrame()
@@ -17,13 +17,15 @@ Interface::DownstreamData::TimerConfigurationFrame::~TimerConfigurationFrame()
 
 std::vector<uint8_t> Interface::DownstreamData::TimerConfigurationFrame::serialize()
 {
-    std::vector<uint8_t> output(5);
+    std::vector<uint8_t> output(7);
 
     output[0] = stIdentifier;
     output[1] = timerID;
-    output[2] = prescalerValue;
-    output[3] = counterValue;
-    output[4] = clockDivider;
+    output[2] = prescalerValue >> 8;
+    output[3] = prescalerValue & 0xFF;
+    output[4] = counterValue >> 8;
+    output[5] = counterValue & 0xFF;
+    output[6] = clockDivider;
 
     return output;
 }

@@ -20,6 +20,8 @@ private:
 
     int timeToDrive;
 
+    int shallQueue;
+
 public:
 
     MovementOrderLeftRightFrame();

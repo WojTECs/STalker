@@ -15,15 +15,18 @@ Interface::DownstreamData::MovementOrderLeftRightFrame::~MovementOrderLeftRightF
 
 std::vector<uint8_t> Interface::DownstreamData::MovementOrderLeftRightFrame::serialize()
 {
-    std::vector<uint8_t> output(7);
+    std::vector<uint8_t> output(9);
 
-    output[0] = 0x04;//ID
+    output[0] = 0x02;//ID
     output[1] = leftDirection << 4 || rightDirection;
     output[2] = leftSidePWM >> 8;
     output[3] = leftSidePWM & 0xFF;
     output[4] = rightSidePWM >> 8;
     output[5] = rightSidePWM & 0xFF;
     output[6] = timeToDrive >> 8;
+    output[7] = timeToDrive & 0xFF;
+    output[8] = shallQueue;
+
 
     return output;
 }
@@ -36,7 +39,8 @@ void Interface::DownstreamData::MovementOrderLeftRightFrame::deserialize(boost::
         rightDirection = pt.get<int>("MovementFrameLeftRight.rightDirection");
         leftSidePWM = pt.get<int>("MovementFrameLeftRight.leftSidePWM");
         rightSidePWM = pt.get<int>("MovementFrameLeftRight.rightSidePWM");
-        timeToDrive = pt.get<int>("MovementFrameTurnPropulsion.timeToDrive");
+        timeToDrive = pt.get<int>("MovementFrameLeftRight.timeToDrive");
+        shallQueue = pt.get<int>("MovementFrameLeftRight.shallQueue");
 
     }
     catch (const boost::exception& e)

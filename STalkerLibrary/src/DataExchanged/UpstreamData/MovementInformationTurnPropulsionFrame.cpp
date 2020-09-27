@@ -6,7 +6,7 @@ Interface::UpstreamData::MovementInformationTurnPropulsionFrame::MovementInforma
 {
     protocolIndentificator = uint8_t{0x02};
     datasetBinarySize = 8;
-    rosTopic = "MovmentInformationFrame";
+    rosTopic = "MovementInformationFrame";
 }
 
 Interface::UpstreamData::MovementInformationTurnPropulsionFrame::~MovementInformationTurnPropulsionFrame()

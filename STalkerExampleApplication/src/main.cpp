@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.2.10", "7");
+        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "localhost", "7");
     }
     catch (const boost::exception& e)
     {
@@ -36,8 +36,16 @@ int main(int argc, char **argv)
     stClient->setROSInterface(rosClient);
     rosClient->setSTUDPInterface(stClient);
 
-    std::unique_ptr<Interface::DownstreamData::IMUFrame> imuFrame(new Interface::DownstreamData::IMUFrame);
-    rosClient->addExpectedDataType(std::move(imuFrame));
+    std::unique_ptr<Interface::DownstreamData::AccelerometerFrame> aFrame(new Interface::DownstreamData::AccelerometerFrame);
+    rosClient->addExpectedDataType(std::move(aFrame));
+    std::unique_ptr<Interface::DownstreamData::ElectromagnesFrame> eFrame(new Interface::DownstreamData::ElectromagnesFrame);
+    rosClient->addExpectedDataType(std::move(eFrame));
+    std::unique_ptr<Interface::DownstreamData::GyroscopeFrame> gFrame(new Interface::DownstreamData::GyroscopeFrame);
+    rosClient->addExpectedDataType(std::move(gFrame));
+    std::unique_ptr<Interface::DownstreamData::MagnetometerFrame> mFrame(new Interface::DownstreamData::MagnetometerFrame);
+    rosClient->addExpectedDataType(std::move(mFrame));
+    std::unique_ptr<Interface::DownstreamData::MainConfigurationFrame> cFrame(new Interface::DownstreamData::MainConfigurationFrame);
+    rosClient->addExpectedDataType(std::move(cFrame));
     std::unique_ptr<Interface::DownstreamData::MovementOrderTurnPropulsionFrame> movementFrame(new Interface::DownstreamData::MovementOrderTurnPropulsionFrame);
     rosClient->addExpectedDataType(std::move(movementFrame));
     std::unique_ptr<Interface::DownstreamData::TimerConfigurationFrame> timerConfigurationFrame(new Interface::DownstreamData::TimerConfigurationFrame);

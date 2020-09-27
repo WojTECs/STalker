@@ -7,7 +7,7 @@ namespace Interface
 namespace DownstreamData
 
 {
-class IMUFrame : public Interface::DownstreamDataType
+class MagnetometerFrame : public Interface::DownstreamDataType
 {
 private:
 
@@ -16,8 +16,8 @@ private:
 
 public:
 
-    IMUFrame();
-    virtual ~IMUFrame();
+    MagnetometerFrame();
+    virtual ~MagnetometerFrame();
 
     std::vector<uint8_t> serialize() override;
     void deserialize(boost::property_tree::ptree& pt) override;

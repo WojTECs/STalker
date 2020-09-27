@@ -18,9 +18,10 @@ testAll = False #stronger than test<specificFrame> vars
 testMultiframe = False
 
 #vars for separate tests
+testLIDAR = True
 testAccellerometer = False
 testGyroscope = False
-testMagnetometer = True
+testMagnetometer = False
 testPWM = False
 testEncoder = False
 useTCP = False #Default UDP
@@ -49,6 +50,11 @@ if testAll or testMultiframe :
                 +b'\x01\x01\x02\x03\x03\x03\x0a\x0b\x0c\x0d'
                 +b'\x01\x02\x02\x03\x03\x03\x0a\x0b\x0c\x0d'
                 +b'\x01\x03\x02\x03\x03\x03\x0a\x0b\x0c\x0d')
+    s.close()
+
+if testAll or testLIDAR :
+    s.connect((host, port))
+    s.sendall(b'\x09\x01\x00\x01\x00\x02\x03')
     s.close()
 
 if testAll or testAccellerometer :
