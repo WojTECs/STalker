@@ -17,12 +17,12 @@ Interface::UpstreamData::ContinentalLIDARReflectionFrame::~ContinentalLIDARRefle
 void Interface::UpstreamData::ContinentalLIDARReflectionFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
 
-    std_msgs::Float64MultiArray array;
+    std_msgs::UInt16MultiArray array;
     array.data.push_back(leftBeamReflection);
     array.data.push_back(centralBeamReflection);
     array.data.push_back(rightBeamReflection);
 
-    ROSClient.publishFloat64Array(array, rosTopic);
+    ROSClient.publishUInt16Array(array, rosTopic);
 }
 
 void Interface::UpstreamData::ContinentalLIDARReflectionFrame::deserialize(const char *iDataStream, const int iDataSize)
@@ -33,9 +33,9 @@ void Interface::UpstreamData::ContinentalLIDARReflectionFrame::deserialize(const
         return;
     }
 
-    leftBeamReflection = iDataStream[0]<<8 | iDataStream[1];
-    centralBeamReflection = iDataStream[2]<<8 | iDataStream[3];
-    rightBeamReflection = iDataStream[4]<<8 | iDataStream[5];
+    leftBeamReflection = (iDataStream[0]<<8) | (iDataStream[1] & 0xFF);
+    centralBeamReflection = (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
+    rightBeamReflection = (iDataStream[4]<<8) | (iDataStream[5] & 0xFF);
 }
 
 std::string Interface::UpstreamData::ContinentalLIDARReflectionFrame::serialize()

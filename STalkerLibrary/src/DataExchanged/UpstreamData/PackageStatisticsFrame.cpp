@@ -17,12 +17,12 @@ Interface::UpstreamData::PackageStatisticsFrame::~PackageStatisticsFrame()
 void Interface::UpstreamData::PackageStatisticsFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
 
-    std_msgs::Int32MultiArray array;
+    std_msgs::UInt32MultiArray array;
 
     array.data.push_back(sentPackages);
     array.data.push_back(malformedPackages);
 
-    ROSClient.publishInt32Array(array, rosTopic);
+    ROSClient.publishUInt32Array(array, rosTopic);
 }
 
 void Interface::UpstreamData::PackageStatisticsFrame::deserialize(const char *iDataStream, const int iDataSize)
@@ -32,8 +32,8 @@ void Interface::UpstreamData::PackageStatisticsFrame::deserialize(const char *iD
         ROS_ERROR("Bad Time Sync frame received. Length is mismatching");
         return;
     }
-    sentPackages = iDataStream[0]<<24 | iDataStream[1]<<16 | iDataStream[2]<<8 | iDataStream[3];
-    malformedPackages = iDataStream[4]<<24 | iDataStream[5]<<16 | iDataStream[6]<<8 | iDataStream[7];
+    sentPackages = (iDataStream[0]<<24) | (iDataStream[1]<<16) | (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
+    malformedPackages = (iDataStream[4]<<24) | (iDataStream[5]<<16) | (iDataStream[6]<<8) | (iDataStream[7] & 0xFF);
 }
 
 std::string Interface::UpstreamData::PackageStatisticsFrame::serialize()

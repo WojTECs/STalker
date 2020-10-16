@@ -94,6 +94,20 @@ void ROSInterface::ROSInterfaceClient::publishFloat64Array(std_msgs::Float64Mult
     }
 }
 
+void ROSInterface::ROSInterfaceClient::publishUInt16Array(std_msgs::UInt16MultiArray array, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::UInt16MultiArray>(rosTopic, 1000);
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(array);
+    }
+}
+
 void ROSInterface::ROSInterfaceClient::publishInt32Array(std_msgs::Int32MultiArray array, std::string rosTopic)
 {
     rosPublisherIndex = rosPublishers.find(rosTopic);
@@ -105,6 +119,35 @@ void ROSInterface::ROSInterfaceClient::publishInt32Array(std_msgs::Int32MultiArr
     else
     {
         rosPublisherIndex->second.publish(array);
+    }
+}
+
+void ROSInterface::ROSInterfaceClient::publishUInt8Array(std_msgs::UInt8MultiArray array, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::UInt8MultiArray>(rosTopic, 1000);
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(array);
+    }
+}
+
+void ROSInterface::ROSInterfaceClient::publishUInt16(std_msgs::UInt16 input, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::UInt16>(rosTopic, 1000);
+
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(input);
     }
 }
 
@@ -123,12 +166,39 @@ void ROSInterface::ROSInterfaceClient::publishUInt32(std_msgs::UInt32 input, std
     }
 }
 
+void ROSInterface::ROSInterfaceClient::publishUInt32Array(std_msgs::UInt32MultiArray array, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<std_msgs::UInt32MultiArray>(rosTopic, 1000);
+
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(array);
+    }
+}
+
 void ROSInterface::ROSInterfaceClient::publishNavSatFix(sensor_msgs::NavSatFix input, std::string rosTopic)
 {
     rosPublisherIndex = rosPublishers.find(rosTopic);
     if (rosPublisherIndex == rosPublishers.end())
     {
         rosPublishers[rosTopic] = nodeHandle.advertise<sensor_msgs::NavSatFix>(rosTopic, 1000);
+    }
+    else
+    {
+        rosPublisherIndex->second.publish(input);
+    }
+}
+
+void ROSInterface::ROSInterfaceClient::publishLaserScan(sensor_msgs::LaserScan input, std::string rosTopic)
+{
+    rosPublisherIndex = rosPublishers.find(rosTopic);
+    if (rosPublisherIndex == rosPublishers.end())
+    {
+        rosPublishers[rosTopic] = nodeHandle.advertise<sensor_msgs::LaserScan>(rosTopic, 1000);
     }
     else
     {

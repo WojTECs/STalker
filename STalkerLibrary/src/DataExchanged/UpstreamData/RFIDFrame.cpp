@@ -17,11 +17,15 @@ Interface::UpstreamData::RFIDFrame::~RFIDFrame()
 void Interface::UpstreamData::RFIDFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
 
-    std_msgs::UInt32 data;
+    std_msgs::UInt8MultiArray array;
 
-    data.data = cardID;
+    array.data.push_back(cardID[0]);
+    array.data.push_back(cardID[1]);
+    array.data.push_back(cardID[2]);
+    array.data.push_back(cardID[3]);
+    array.data.push_back(cardID[4]);
 
-    ROSClient.publishUInt32(data, rosTopic);
+    ROSClient.publishUInt8Array(array, rosTopic);
 }
 
 void Interface::UpstreamData::RFIDFrame::deserialize(const char *iDataStream, const int iDataSize)
@@ -31,7 +35,12 @@ void Interface::UpstreamData::RFIDFrame::deserialize(const char *iDataStream, co
         ROS_ERROR("Bad Time Sync frame received. Length is mismatching");
         return;
     }
-    cardID = iDataStream[0]<<24 | iDataStream[1]<<16 | iDataStream[2]<<8 | iDataStream[3];
+
+    cardID[0] = iDataStream[0];
+    cardID[1] = iDataStream[1];
+    cardID[2] = iDataStream[2];
+    cardID[3] = iDataStream[3];
+    cardID[4] = iDataStream[4];
 }
 
 std::string Interface::UpstreamData::RFIDFrame::serialize()

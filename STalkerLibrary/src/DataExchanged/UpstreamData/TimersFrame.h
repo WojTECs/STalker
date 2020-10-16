@@ -14,13 +14,13 @@ class TimersFrame : public Interface::UpstreamDataType
 {
 private:
 
-    int16_t reg_psc_imu;
-    int16_t reg_arr_imu;
-    int32_t freq_imu;
-    int16_t data_psc;
-    int16_t data_arr;
-    int8_t  reg_clk_div_data_send;//hell knows what all of that means :> Good luck!
-    int32_t freq_data_send;
+    uint16_t reg_psc_imu;
+    uint16_t reg_arr_imu;
+    uint32_t freq_imu;
+    uint16_t data_psc;
+    uint16_t data_arr;
+    uint8_t  reg_clk_div_data_send;//hell knows what all of that means :> Good luck!
+    uint32_t freq_data_send;
 public:
 
     TimersFrame();

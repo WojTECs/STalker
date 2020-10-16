@@ -6,7 +6,7 @@
 Interface::DownstreamData::MovementOrderTurnPropulsionFrame::MovementOrderTurnPropulsionFrame()
 {
     potocolIndentificator = "MovementFrameTurnPropulsion";
-    stIdentifier = 0x04;
+    stIdentifier = 0x02;
 }
 
 Interface::DownstreamData::MovementOrderTurnPropulsionFrame::~MovementOrderTurnPropulsionFrame()

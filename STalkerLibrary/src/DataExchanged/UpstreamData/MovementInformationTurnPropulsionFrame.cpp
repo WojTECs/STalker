@@ -37,12 +37,12 @@ void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::deserializ
         return;
     }
 
-    turnDirection = iDataStream[0] >> 4;
+    turnDirection = (iDataStream[0] >> 4) & 0x0F;
     propulsionDirection = iDataStream[0] & 0x0F;
 
-    turnValue = (iDataStream[1]<<8)+iDataStream[2];
-    propulsionValue = (iDataStream[3]<<8)+iDataStream[4];
-    remainedTimeToDrive = (iDataStream[5]<<8)+iDataStream[6];
+    turnValue = (iDataStream[1]<<8) | (iDataStream[2] & 0xFF);
+    propulsionValue = (iDataStream[3]<<8) | (iDataStream[4] & 0xFF);
+    remainedTimeToDrive = (iDataStream[5]<<8) | (iDataStream[6] & 0xFF);
     howManyQueued = iDataStream[7];
 }
 

@@ -17,12 +17,12 @@ Interface::UpstreamData::ContinentalLIDARSpeedFrame::~ContinentalLIDARSpeedFrame
 void Interface::UpstreamData::ContinentalLIDARSpeedFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
 
-    std_msgs::Float64MultiArray array;
+    std_msgs::UInt16MultiArray array;
     array.data.push_back(leftBeamSpeed);
     array.data.push_back(centralBeamSpeed);
     array.data.push_back(rightBeamSpeed);
 
-    ROSClient.publishFloat64Array(array, rosTopic);
+    ROSClient.publishUInt16Array(array, rosTopic);
 }
 
 void Interface::UpstreamData::ContinentalLIDARSpeedFrame::deserialize(const char *iDataStream, const int iDataSize)
@@ -33,9 +33,9 @@ void Interface::UpstreamData::ContinentalLIDARSpeedFrame::deserialize(const char
         return;
     }
 
-    leftBeamSpeed = iDataStream[0]<<8 | iDataStream[1];
-    centralBeamSpeed = iDataStream[2]<<8 | iDataStream[3];
-    rightBeamSpeed = iDataStream[4]<<8 | iDataStream[5];
+    leftBeamSpeed = (iDataStream[0]<<8) | (iDataStream[1] & 0xFF);
+    centralBeamSpeed = (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
+    rightBeamSpeed = (iDataStream[4]<<8) | (iDataStream[5] & 0xFF);
 }
 
 std::string Interface::UpstreamData::ContinentalLIDARSpeedFrame::serialize()

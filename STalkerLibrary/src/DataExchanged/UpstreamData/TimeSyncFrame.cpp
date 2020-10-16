@@ -31,7 +31,7 @@ void Interface::UpstreamData::TimeSyncFrame::deserialize(const char *iDataStream
         ROS_ERROR("Bad Time Sync frame received. Length is mismatching");
         return;
     }
-    timeSync = iDataStream[0]<<24 | iDataStream[1]<<16 | iDataStream[2]<<8 | iDataStream[3];
+    timeSync = (iDataStream[0]<<24) | (iDataStream[1]<<16) | (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
 }
 
 std::string Interface::UpstreamData::TimeSyncFrame::serialize()

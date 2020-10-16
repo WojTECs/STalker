@@ -81,6 +81,8 @@ int main(int argc, char **argv)
     stClient->addExpectedDataType(std::move(timersFrame));
     std::unique_ptr<Interface::UpstreamData::TimeSyncFrame>timeSyncFrame(new Interface::UpstreamData::TimeSyncFrame);
     stClient->addExpectedDataType(std::move(timeSyncFrame));
+    std::unique_ptr<Interface::UpstreamData::UltraSoundFrame> ultraSoundFrame(new Interface::UpstreamData::UltraSoundFrame);
+    stClient->addExpectedDataType(std::move(ultraSoundFrame));
 
     stClient->run();
 

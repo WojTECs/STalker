@@ -49,18 +49,18 @@ void Interface::UpstreamData::GyroscopeFrame::deserialize(const char *iDataStrea
 
         byteShift = i * datasetBinarySize;
         datasets[i].xAxis = (iDataStream[0 + byteShift]<<8)+
-                iDataStream[1 + byteShift];
+                (iDataStream[1 + byteShift] & 0xFF);
 
         datasets[i].yAxis = (iDataStream[2 + byteShift]<<8)+
-                iDataStream[3 + byteShift];
+                (iDataStream[3 + byteShift] & 0xFF);
 
         datasets[i].zAxis = (iDataStream[4 + byteShift]<<8)+
-                iDataStream[5 + byteShift];
+                (iDataStream[5 + byteShift] & 0xFF);
 
         datasets[i].timestamp = (iDataStream[6 + byteShift]<<24)+
                 (iDataStream[7 + byteShift]<<16)+
                 (iDataStream[8 + byteShift]<<8)+
-                iDataStream[9 + byteShift];
+                (iDataStream[9 + byteShift] & 0xFF);
     }
 }
 

@@ -54,7 +54,6 @@ void Interface::UpstreamData::GPSFrame::deserialize(const char *iDataStream, con
     }
     countOfSatelites = iDataStream[0];
 
-    //WARNING WARNING WARNING. I'm not sure if hdop shall be 8 or 32 bytes long.!!!!!!!!!!!!!! LOOOK HEEEEERE!!!
     hdop.encoded[3] = iDataStream[1];
     hdop.encoded[2] = iDataStream[2];
     hdop.encoded[1] = iDataStream[3];
@@ -80,10 +79,10 @@ void Interface::UpstreamData::GPSFrame::deserialize(const char *iDataStream, con
     longitude.encoded[1] = iDataStream[19];
     longitude.encoded[0] = iDataStream[20];
 
-    infoAge = iDataStream[21]<<24 | iDataStream[22]<<16 | iDataStream[23]<<8 | iDataStream[24];
+    infoAge = (iDataStream[21]<<24) | (iDataStream[22]<<16) | (iDataStream[23]<<8) | (iDataStream[24] & 0xFF);
     day = iDataStream[25];
     month = iDataStream[26];
-    year = iDataStream[27]<<8 | iDataStream[28];
+    year = (iDataStream[27]<<8) | (iDataStream[28] & 0xFF);
 
     hour = iDataStream[29];
     minute = iDataStream[30];

@@ -16,13 +16,12 @@ Interface::UpstreamData::MovementInformationLeftRightFrame::~MovementInformation
 
 void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-
-    rightTurnDirection = iDataStream[0] >> 4;
+    rightTurnDirection = (iDataStream[0] >> 4) & 0x0F;
     leftTurnDirection = iDataStream[0] & 0x0F;
 
-    rightTurnValue = (iDataStream[1]<<8)+iDataStream[2];
-    leftTurnValue = (iDataStream[3]<<8)+iDataStream[4];
-    remainedTimeToDrive = (iDataStream[5]<<8)+iDataStream[6];
+    rightTurnValue = (iDataStream[1]<<8) | (iDataStream[2] & 0xFF);
+    leftTurnValue = (iDataStream[3]<<8) | (iDataStream[4] & 0xFF);
+    remainedTimeToDrive = (iDataStream[5]<<8) | (iDataStream[6] & 0xFF);
     howManyQueued = iDataStream[7];
 }
 
@@ -65,7 +64,7 @@ std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::MovementIn
 void Interface::UpstreamData::MovementInformationLeftRightFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
 
-    std_msgs::Int32MultiArray array;
+    std_msgs::UInt16MultiArray array;
 
     array.data.push_back(rightTurnDirection);
     array.data.push_back(leftTurnDirection);
@@ -74,5 +73,5 @@ void Interface::UpstreamData::MovementInformationLeftRightFrame::sendData(ROSInt
     array.data.push_back(remainedTimeToDrive);
     array.data.push_back(howManyQueued);
 
-    ROSClient.publishInt32Array(array, rosTopic);
+    ROSClient.publishUInt16Array(array, rosTopic);
 }

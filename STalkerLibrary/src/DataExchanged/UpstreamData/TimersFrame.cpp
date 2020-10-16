@@ -14,13 +14,13 @@ Interface::UpstreamData::TimersFrame::~TimersFrame()
 
 void Interface::UpstreamData::TimersFrame::deserialize(const char *iDataStream, const int iDataSize)
 {
-    reg_psc_imu = (iDataStream[0]<<8)+iDataStream[1];
-    reg_arr_imu = (iDataStream[2]<<8)+iDataStream[3];
-    freq_imu = iDataStream[4]<<24 | iDataStream[5]<<16 | iDataStream[6]<<8 | iDataStream[7];
-    data_psc = (iDataStream[8]<<8)+iDataStream[9];
-    data_arr = (iDataStream[10]<<8)+iDataStream[11];
-    reg_clk_div_data_send = iDataStream[12];
-    freq_data_send = iDataStream[13]<<24 | iDataStream[14]<<16 | iDataStream[15]<<8 | iDataStream[16];
+    reg_psc_imu = (iDataStream[0]<<8) | (iDataStream[1] & 0xFF);
+    reg_arr_imu = (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
+    freq_imu = (iDataStream[4]<<24) | (iDataStream[5]<<16) | (iDataStream[6]<<8) | (iDataStream[7] & 0xFF);
+    data_psc = (iDataStream[8]<<8) | (iDataStream[9] & 0xFF);
+    data_arr = (iDataStream[10]<<8) | (iDataStream[11] & 0xFF);
+    reg_clk_div_data_send = iDataStream[12] & 0xFF;
+    freq_data_send = (iDataStream[13]<<24) | (iDataStream[14]<<16) | (iDataStream[15]<<8) | (iDataStream[16] & 0xFF);
 }
 
 std::string Interface::UpstreamData::TimersFrame::serialize()
@@ -65,7 +65,7 @@ std::unique_ptr<Interface::UpstreamDataType> Interface::UpstreamData::TimersFram
 
 void Interface::UpstreamData::TimersFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
-    std_msgs::Int32MultiArray array;
+    std_msgs::UInt16MultiArray array;
 
     array.data.push_back(reg_psc_imu);
     array.data.push_back(reg_arr_imu);
@@ -75,5 +75,5 @@ void Interface::UpstreamData::TimersFrame::sendData(ROSInterface::ROSInterfaceCl
     array.data.push_back(reg_clk_div_data_send);
     array.data.push_back(freq_data_send);
 
-    ROSClient.publishInt32Array(array, rosTopic);
+    ROSClient.publishUInt16Array(array, rosTopic);
 }

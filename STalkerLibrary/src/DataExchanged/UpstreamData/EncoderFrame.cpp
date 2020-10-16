@@ -44,7 +44,7 @@ void Interface::UpstreamData::EncoderFrame::deserialize(const char *iDataStream,
         return;
     }
 
-    leftRotationDirection = (iDataStream[0]>>4);
+    leftRotationDirection = (iDataStream[0]>>4) & 0x0F;
     rightRotationDirection = (iDataStream[0]) & 0xF;
 
     leftSideVelocity.array[3] = iDataStream[1];

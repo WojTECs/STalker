@@ -17,7 +17,7 @@ Interface::UpstreamData::ServiceTimeFrame::~ServiceTimeFrame()
 void Interface::UpstreamData::ServiceTimeFrame::sendData(ROSInterface::ROSInterfaceClient &ROSClient)
 {
 
-    std_msgs::Int32MultiArray array;
+    std_msgs::UInt16MultiArray array;
 
     array.data.push_back(IMUTime);
     array.data.push_back(dataSendTime);
@@ -26,7 +26,7 @@ void Interface::UpstreamData::ServiceTimeFrame::sendData(ROSInterface::ROSInterf
     array.data.push_back(LIDARTime);
     array.data.push_back(UltrasoundTime);
 
-    ROSClient.publishInt32Array(array, rosTopic);
+    ROSClient.publishUInt16Array(array, rosTopic);
 }
 
 void Interface::UpstreamData::ServiceTimeFrame::deserialize(const char *iDataStream, const int iDataSize)
@@ -37,12 +37,12 @@ void Interface::UpstreamData::ServiceTimeFrame::deserialize(const char *iDataStr
         return;
     }
 
-    IMUTime = (iDataStream[0]<<8)+iDataStream[2];
-    dataSendTime= (iDataStream[1]<<8)+iDataStream[2];
-    EnkoderTime= (iDataStream[1]<<8)+iDataStream[2];
-    PWMTime= (iDataStream[1]<<8)+iDataStream[2];
-    LIDARTime= (iDataStream[1]<<8)+iDataStream[2];
-    UltrasoundTime= (iDataStream[1]<<8)+iDataStream[2];
+    IMUTime = (iDataStream[0]<<8) | (iDataStream[1] & 0xFF);
+    dataSendTime = (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
+    EnkoderTime = (iDataStream[4]<<8) | (iDataStream[5] & 0xFF);
+    PWMTime = (iDataStream[6]<<8) | (iDataStream[7] & 0xFF);
+    LIDARTime = (iDataStream[8]<<8) | (iDataStream[9] & 0xFF);
+    UltrasoundTime = (iDataStream[10]<<8) | (iDataStream[11] & 0xFF);
 }
 
 std::string Interface::UpstreamData::ServiceTimeFrame::serialize()

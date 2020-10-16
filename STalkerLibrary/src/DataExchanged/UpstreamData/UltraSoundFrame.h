@@ -1,7 +1,7 @@
 #pragma once
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+//#include <boost/property_tree/ptree.hpp>
+//#include <boost/property_tree/json_parser.hpp>
 
 #include "../UpstreamDataType.h"
 
@@ -11,17 +11,15 @@ namespace Interface
 namespace UpstreamData
 {
 
-class RFIDFrame : public Interface::UpstreamDataType
+
+class UltraSoundFrame : public Interface::UpstreamDataType
 {
-
 private:
-
-    uint8_t cardID[5];
+    uint16_t distance;
 
 public:
-
-    RFIDFrame();
-    virtual ~RFIDFrame();
+    UltraSoundFrame();
+    virtual ~UltraSoundFrame();
 
     void sendData(ROSInterface::ROSInterfaceClient& ROSClient) override;
     void deserialize(const char* iDataStream, const int iDataSize) override;

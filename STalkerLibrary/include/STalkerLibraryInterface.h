@@ -29,3 +29,4 @@
 #include "../src/DataExchanged/UpstreamData/ServiceTimeFrame.h"
 #include "../src/DataExchanged/UpstreamData/TimersFrame.h"
 #include "../src/DataExchanged/UpstreamData/TimeSyncFrame.h"
+#include "../src/DataExchanged/UpstreamData/UltraSoundFrame.h"
