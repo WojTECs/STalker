@@ -23,7 +23,7 @@ void Interface::UpstreamData::UltraSoundFrame::sendData(ROSInterface::ROSInterfa
     ROSClient.publishUInt16(uSound, rosTopic);
 }
 
-void Interface::UpstreamData::UltraSoundFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::UltraSoundFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

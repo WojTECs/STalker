@@ -39,7 +39,7 @@ void Interface::UpstreamData::ContinentalLIDARDistanceFrame::sendData(ROSInterfa
     ROSClient.publishLaserScan(lscan, rosTopic + "Scan");
 }
 
-void Interface::UpstreamData::ContinentalLIDARDistanceFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::ContinentalLIDARDistanceFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

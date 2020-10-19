@@ -30,7 +30,7 @@ Interface::UpstreamData::AccelerometerFrame::~AccelerometerFrame()
 
 }
 
-void Interface::UpstreamData::AccelerometerFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::AccelerometerFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize % datasetBinarySize != 0)
     {
@@ -50,16 +50,16 @@ void Interface::UpstreamData::AccelerometerFrame::deserialize(const char *iDataS
     {
 
         byteShift = i * datasetBinarySize;
-        datasets[i].xAxis = (iDataStream[0 + byteShift]<<8)+
-                (iDataStream[1 + byteShift] & 0xFF);
+        datasets[i].xAxis = int16_t((iDataStream[0 + byteShift]<<8) |
+                (iDataStream[1 + byteShift] & 0xFF));
 
-        datasets[i].yAxis = (iDataStream[2 + byteShift]<<8)+
-                (iDataStream[3 + byteShift] & 0xFF);
+        datasets[i].yAxis = int16_t((iDataStream[2 + byteShift]<<8) |
+                (iDataStream[3 + byteShift] & 0xFF));
 
-        datasets[i].zAxis = (iDataStream[4 + byteShift]<<8)+
-                (iDataStream[5 + byteShift] & 0xFF);
+        datasets[i].zAxis = int16_t((iDataStream[4 + byteShift]<<8) |
+                (iDataStream[5 + byteShift] & 0xFF));
 
-        datasets[i].timestamp = (iDataStream[6 + byteShift]<<24)+
+        datasets[i].timestamp = (iDataStream[6 + byteShift]<<24) |
                 (iDataStream[7 + byteShift]<<16)+
                 (iDataStream[8 + byteShift]<<8)+
                 (iDataStream[9 + byteShift] & 0xFF);

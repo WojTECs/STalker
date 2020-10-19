@@ -3,7 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include <boost/property_tree/ptree.hpp>
+//#include <boost/property_tree/ptree.hpp>
+#include <std_msgs/UInt16MultiArray.h>
 
 
 namespace Interface{
@@ -20,9 +21,9 @@ protected:
 public:
 
     virtual ~DownstreamDataType(){}
-    std::string getProtocolIdentificator() const{ return potocolIndentificator;}
+    int getProtocolIdentificator() const{ return stIdentifier;}
     virtual std::vector<uint8_t> serialize() = 0;
-    virtual void deserialize(boost::property_tree::ptree& pt) = 0;
+    virtual void deserialize(const uint16_t *msgArray, uint16_t arraySize) = 0;
     virtual void doTheProcessing() = 0;
 
 };

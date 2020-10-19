@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     try
     {
-        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "localhost", "7");
+        stClient = std::make_shared<STInterface::STInterfaceClientUDP>(1115, "192.168.1.10", "7");
     }
     catch (const boost::exception& e)
     {
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     rosClient->addExpectedDataType(std::move(mFrame));
     std::unique_ptr<Interface::DownstreamData::MainConfigurationFrame> cFrame(new Interface::DownstreamData::MainConfigurationFrame);
     rosClient->addExpectedDataType(std::move(cFrame));
-    std::unique_ptr<Interface::DownstreamData::MovementOrderTurnPropulsionFrame> movementFrame(new Interface::DownstreamData::MovementOrderTurnPropulsionFrame);
+    std::unique_ptr<Interface::DownstreamData::MovementOrderLeftRightFrame> movementFrame(new Interface::DownstreamData::MovementOrderLeftRightFrame);
     rosClient->addExpectedDataType(std::move(movementFrame));
     std::unique_ptr<Interface::DownstreamData::TimerConfigurationFrame> timerConfigurationFrame(new Interface::DownstreamData::TimerConfigurationFrame);
     rosClient->addExpectedDataType(std::move(timerConfigurationFrame));

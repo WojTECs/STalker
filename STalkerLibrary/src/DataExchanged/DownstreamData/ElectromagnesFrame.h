@@ -19,7 +19,7 @@ public:
     virtual ~ElectromagnesFrame();
 
     std::vector<uint8_t> serialize() override;
-    void deserialize(boost::property_tree::ptree& pt) override;
+    void deserialize(const uint16_t *msgArray, uint16_t arraySize) override;
     void doTheProcessing() override;
 };
 

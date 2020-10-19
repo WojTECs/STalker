@@ -33,13 +33,13 @@ void Interface::UpstreamData::LidarFrame::sendData(ROSInterface::ROSInterfaceCli
     lscan.scan_time = 0;
     lscan.range_min = 0.03;
     lscan.range_max = 12;
-    lscan.ranges.push_back(distance / 100); // cm -> m
+    lscan.ranges.push_back(distance / 100.0); // cm -> m
     lscan.intensities.push_back(signalStrength);
 
     ROSClient.publishLaserScan(lscan, rosTopic + "Scan");
 }
 
-void Interface::UpstreamData::LidarFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::LidarFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

@@ -36,7 +36,7 @@ private:
 
     std::shared_ptr<STInterface::STInterfaceClientTCP> STTCPClient;
     std::shared_ptr<STInterface::STInterfaceClientUDP> STUDPClient;
-    std::list<std::unique_ptr<Interface::DownstreamDataType>> expectedDataTypes;
+    std::unique_ptr<Interface::DownstreamDataType> expectedDataTypes[256];
 
     ros::NodeHandle nodeHandle;
     ros::Subscriber subscriber;
@@ -53,8 +53,8 @@ public:
     //Adds >>REFERENCE<< for the object in the internal list of expected data types.
     void addExpectedDataType(std::unique_ptr<Interface::DownstreamDataType> iExpectedDataType);
     //Necessary to call to empty the list of expected data types. Not calling may result in SIGABRT!.
-    void clear();
-    void receiveMessageCallback(const std_msgs::String::ConstPtr& msg);
+//    void clear();
+    void receiveMessageCallback(const std_msgs::UInt16MultiArray::ConstPtr& msg);
     void publishString(std::string iData, std::string rosTopic);
     void publishFloat64Array(std_msgs::Float64MultiArray array, std::string rosTopic);
     void publishUInt16Array(std_msgs::UInt16MultiArray array, std::string rosTopic);

@@ -36,7 +36,7 @@ void Interface::UpstreamData::EncoderFrame::sendData(ROSInterface::ROSInterfaceC
     ROSClient.publishFloat64Array(array, rosTopic);
 }
 
-void Interface::UpstreamData::EncoderFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::EncoderFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

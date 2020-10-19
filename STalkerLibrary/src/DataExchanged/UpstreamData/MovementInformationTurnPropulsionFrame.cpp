@@ -29,7 +29,7 @@ void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::sendData(R
     ROSClient.publishInt32Array(array, rosTopic);
 }
 
-void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::MovementInformationTurnPropulsionFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

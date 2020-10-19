@@ -40,7 +40,7 @@ public:
 
     virtual void sendData(ROSInterface::ROSInterfaceClient& ROSClient)=0;
 
-    virtual void deserialize(const char* iDataStream, const int iDataSize)=0;
+    virtual void deserialize(const uint8_t* iDataStream, const int iDataSize)=0;
     virtual std::string serialize()=0;
     virtual void doTheProcessing()=0;
 

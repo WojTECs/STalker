@@ -45,7 +45,7 @@ Interface::UpstreamData::GPSFrame::~GPSFrame()
 
 }
 
-void Interface::UpstreamData::GPSFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::GPSFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize % datasetBinarySize != 0)
     {

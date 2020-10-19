@@ -28,7 +28,7 @@ void Interface::UpstreamData::RFIDFrame::sendData(ROSInterface::ROSInterfaceClie
     ROSClient.publishUInt8Array(array, rosTopic);
 }
 
-void Interface::UpstreamData::RFIDFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::RFIDFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

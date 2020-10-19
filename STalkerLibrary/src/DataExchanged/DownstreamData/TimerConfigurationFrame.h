@@ -22,7 +22,7 @@ public:
     virtual ~TimerConfigurationFrame();
 
     std::vector<uint8_t> serialize();
-    void deserialize(boost::property_tree::ptree& pt);
+    void deserialize(const uint16_t *msgArray, uint16_t arraySize);
     void doTheProcessing();
 
 };

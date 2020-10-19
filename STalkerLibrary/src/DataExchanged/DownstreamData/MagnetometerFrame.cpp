@@ -26,19 +26,21 @@ std::vector<uint8_t> Interface::DownstreamData::MagnetometerFrame::serialize()
     return output;
 }
 
-void Interface::DownstreamData::MagnetometerFrame::deserialize(boost::property_tree::ptree& pt)
+void Interface::DownstreamData::MagnetometerFrame::deserialize(const uint16_t *msgArray, uint16_t arraySize)
 {
-    try
-    {
-        registryAddress = pt.get<int>("MagnetometerFrame.RegistryAddress");
-        registryValue = pt.get<int>("MagnetometerFrame.RegistryValue");
-    }
-    catch (const boost::exception& e)
-    {
-        std::string diag = diagnostic_information(e);
-        ROS_ERROR("Bad IMU frame received. Boost says: %s", diag.c_str());
-    }
+//    try
+//    {
+//        registryAddress = pt.get<int>("MagnetometerFrame.RegistryAddress");
+//        registryValue = pt.get<int>("MagnetometerFrame.RegistryValue");
+//    }
+//    catch (const boost::exception& e)
+//    {
+//        std::string diag = diagnostic_information(e);
+//        ROS_ERROR("Bad IMU frame received. Boost says: %s", diag.c_str());
+//    }
 
+    registryAddress = msgArray[0];
+    registryValue = msgArray[1];
 }
 
 void Interface::DownstreamData::MagnetometerFrame::doTheProcessing()

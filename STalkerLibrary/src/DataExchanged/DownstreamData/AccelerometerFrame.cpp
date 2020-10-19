@@ -26,19 +26,21 @@ std::vector<uint8_t> Interface::DownstreamData::AccelerometerFrame::serialize()
     return output;
 }
 
-void Interface::DownstreamData::AccelerometerFrame::deserialize(boost::property_tree::ptree& pt)
+void Interface::DownstreamData::AccelerometerFrame::deserialize(const uint16_t *msgArray, uint16_t arraySize)
 {
-    try
-    {
-        registryAddress = pt.get<int>("AccelerometerFrame.RegistryAddress");
-        registryValue = pt.get<int>("AccelerometerFrame.RegistryValue");
-    }
-    catch (const boost::exception& e)
-    {
-        std::string diag = diagnostic_information(e);
-        ROS_ERROR("Bad IMU frame received. Boost says: %s", diag.c_str());
-    }
+//    try
+//    {
+//        registryAddress = pt.get<int>("AccelerometerFrame.RegistryAddress");
+//        registryValue = pt.get<int>("AccelerometerFrame.RegistryValue");
+//    }
+//    catch (const boost::exception& e)
+//    {
+//        std::string diag = diagnostic_information(e);
+//        ROS_ERROR("Bad IMU frame received. Boost says: %s", diag.c_str());
+//    }
 
+    registryAddress = msgArray[0];
+    registryValue = msgArray[1];
 }
 
 void Interface::DownstreamData::AccelerometerFrame::doTheProcessing()

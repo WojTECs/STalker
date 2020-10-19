@@ -14,7 +14,7 @@ Interface::UpstreamData::MovementInformationLeftRightFrame::~MovementInformation
 
 }
 
-void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::MovementInformationLeftRightFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     rightTurnDirection = (iDataStream[0] >> 4) & 0x0F;
     leftTurnDirection = iDataStream[0] & 0x0F;

@@ -5,6 +5,7 @@
 
 Interface::DownstreamData::MovementOrderLeftRightFrame::MovementOrderLeftRightFrame()
 {
+    stIdentifier = 0x02;
     potocolIndentificator = "MovementFrame";
 }
 
@@ -17,8 +18,8 @@ std::vector<uint8_t> Interface::DownstreamData::MovementOrderLeftRightFrame::ser
 {
     std::vector<uint8_t> output(9);
 
-    output[0] = 0x02;//ID
-    output[1] = leftDirection << 4 || rightDirection;
+    output[0] = stIdentifier; //ID
+    output[1] = (leftDirection << 4) | (rightDirection & 0x0F);
     output[2] = leftSidePWM >> 8;
     output[3] = leftSidePWM & 0xFF;
     output[4] = rightSidePWM >> 8;
@@ -31,23 +32,30 @@ std::vector<uint8_t> Interface::DownstreamData::MovementOrderLeftRightFrame::ser
     return output;
 }
 
-void Interface::DownstreamData::MovementOrderLeftRightFrame::deserialize(boost::property_tree::ptree& pt)
+void Interface::DownstreamData::MovementOrderLeftRightFrame::deserialize(const uint16_t *msgArray, uint16_t arraySize)
 {
-    try
-    {
-        leftDirection = pt.get<int>("MovementFrameLeftRight.leftDirection");
-        rightDirection = pt.get<int>("MovementFrameLeftRight.rightDirection");
-        leftSidePWM = pt.get<int>("MovementFrameLeftRight.leftSidePWM");
-        rightSidePWM = pt.get<int>("MovementFrameLeftRight.rightSidePWM");
-        timeToDrive = pt.get<int>("MovementFrameLeftRight.timeToDrive");
-        shallQueue = pt.get<int>("MovementFrameLeftRight.shallQueue");
+//    try
+//    {
+//        leftDirection = pt.get<int>("MovementFrameLeftRight.leftDirection");
+//        rightDirection = pt.get<int>("MovementFrameLeftRight.rightDirection");
+//        leftSidePWM = pt.get<int>("MovementFrameLeftRight.leftSidePWM");
+//        rightSidePWM = pt.get<int>("MovementFrameLeftRight.rightSidePWM");
+//        timeToDrive = pt.get<int>("MovementFrameLeftRight.timeToDrive");
+//        shallQueue = pt.get<int>("MovementFrameLeftRight.shallQueue");
 
-    }
-    catch (const boost::exception& e)
-    {
-        std::string diag = diagnostic_information(e);
-        ROS_ERROR("Bad Movement frame received. Boost says: %s", diag.c_str());
-    }
+//    }
+//    catch (const boost::exception& e)
+//    {
+//        std::string diag = diagnostic_information(e);
+//        ROS_ERROR("Bad Movement frame received. Boost says: %s", diag.c_str());
+//    }
+
+    leftDirection = msgArray[0];
+    rightDirection = msgArray[1];
+    leftSidePWM = msgArray[2];
+    rightSidePWM = msgArray[3];
+    timeToDrive = msgArray[4];
+    shallQueue = msgArray[5];
 }
 
 void Interface::DownstreamData::MovementOrderLeftRightFrame::doTheProcessing()

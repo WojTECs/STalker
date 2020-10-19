@@ -3,7 +3,7 @@
 Interface::UpstreamData::TimersFrame::TimersFrame()
 {
     protocolIndentificator = uint8_t{0x03};
-    datasetBinarySize = 17;//Unknown yet therefore can't be implemented
+    datasetBinarySize = 18;//Unknown yet therefore can't be implemented
     rosTopic = "TimersFrame";
 }
 
@@ -12,15 +12,16 @@ Interface::UpstreamData::TimersFrame::~TimersFrame()
 
 }
 
-void Interface::UpstreamData::TimersFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::TimersFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     reg_psc_imu = (iDataStream[0]<<8) | (iDataStream[1] & 0xFF);
     reg_arr_imu = (iDataStream[2]<<8) | (iDataStream[3] & 0xFF);
-    freq_imu = (iDataStream[4]<<24) | (iDataStream[5]<<16) | (iDataStream[6]<<8) | (iDataStream[7] & 0xFF);
-    data_psc = (iDataStream[8]<<8) | (iDataStream[9] & 0xFF);
-    data_arr = (iDataStream[10]<<8) | (iDataStream[11] & 0xFF);
-    reg_clk_div_data_send = iDataStream[12] & 0xFF;
-    freq_data_send = (iDataStream[13]<<24) | (iDataStream[14]<<16) | (iDataStream[15]<<8) | (iDataStream[16] & 0xFF);
+    reg_clk_div_imu = iDataStream[4] & 0xFF;
+    freq_imu = (iDataStream[5]<<24) | (iDataStream[6]<<16) | (iDataStream[7]<<8) | (iDataStream[8] & 0xFF);
+    data_psc = (iDataStream[9]<<8) | (iDataStream[10] & 0xFF);
+    data_arr = (iDataStream[11]<<8) | (iDataStream[12] & 0xFF);
+    reg_clk_div_data_send = iDataStream[13] & 0xFF;
+    freq_data_send = (iDataStream[14]<<24) | (iDataStream[15]<<16) | (iDataStream[16]<<8) | (iDataStream[17] & 0xFF);
 }
 
 std::string Interface::UpstreamData::TimersFrame::serialize()
@@ -69,6 +70,7 @@ void Interface::UpstreamData::TimersFrame::sendData(ROSInterface::ROSInterfaceCl
 
     array.data.push_back(reg_psc_imu);
     array.data.push_back(reg_arr_imu);
+    array.data.push_back(reg_clk_div_imu);
     array.data.push_back(freq_imu);
     array.data.push_back(data_psc);
     array.data.push_back(data_arr);

@@ -96,7 +96,7 @@ void STInterface::STInterfaceClientUDP::doReceive()
 
                 //moving processing index on the first byte of a next batch
                 byteProcessed += batchMessageLength*expectedDataTypesRegistry[batchMessageType]->getSTBinarySize();
-                int b=0;
+//                int b=0;
             }
 
           doReceive();

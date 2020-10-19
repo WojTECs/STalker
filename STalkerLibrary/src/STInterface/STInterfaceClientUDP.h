@@ -45,7 +45,7 @@ private:
 
 public:
     enum { max_length = 1024 };
-    char rawSocketData[max_length];
+    uint8_t rawSocketData[max_length];
     boost::asio::ip::udp::socket udpSocket;
     boost::asio::ip::udp::endpoint senderEndpoint;
     void doReceive();

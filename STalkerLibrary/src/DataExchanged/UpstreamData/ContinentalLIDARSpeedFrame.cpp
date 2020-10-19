@@ -25,7 +25,7 @@ void Interface::UpstreamData::ContinentalLIDARSpeedFrame::sendData(ROSInterface:
     ROSClient.publishUInt16Array(array, rosTopic);
 }
 
-void Interface::UpstreamData::ContinentalLIDARSpeedFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::ContinentalLIDARSpeedFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

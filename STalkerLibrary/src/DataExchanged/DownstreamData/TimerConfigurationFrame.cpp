@@ -30,21 +30,25 @@ std::vector<uint8_t> Interface::DownstreamData::TimerConfigurationFrame::seriali
     return output;
 }
 
-void Interface::DownstreamData::TimerConfigurationFrame::deserialize(boost::property_tree::ptree& pt)
+void Interface::DownstreamData::TimerConfigurationFrame::deserialize(const uint16_t *msgArray, uint16_t arraySize)
 {
+//    try
+//    {
+//        timerID = pt.get<int>("TimerConfigurationFrame.TimerID");
+//        prescalerValue = pt.get<int>("TimerConfigurationFrame.PrescallerValue");
+//        counterValue = pt.get<int>("TimerConfigurationFrame.CounterValue");
+//        clockDivider = pt.get<int>("TimerConfigurationFrame.ClockDividerValue");
+//    }
+//    catch (const boost::exception& e)
+//    {
+//        std::string diag = diagnostic_information(e);
+//        ROS_ERROR("Bad Timer frame received. Boost says: %s", diag.c_str());
+//    }
 
-    try
-    {
-        timerID = pt.get<int>("TimerConfigurationFrame.TimerID");
-        prescalerValue = pt.get<int>("TimerConfigurationFrame.PrescallerValue");
-        counterValue = pt.get<int>("TimerConfigurationFrame.CounterValue");
-        clockDivider = pt.get<int>("TimerConfigurationFrame.ClockDividerValue");
-    }
-    catch (const boost::exception& e)
-    {
-        std::string diag = diagnostic_information(e);
-        ROS_ERROR("Bad Timer frame received. Boost says: %s", diag.c_str());
-    }
+    timerID = msgArray[0];
+    prescalerValue = msgArray[1];
+    counterValue = msgArray[2];
+    clockDivider = msgArray[3];
 }
 
 void Interface::DownstreamData::TimerConfigurationFrame::doTheProcessing()

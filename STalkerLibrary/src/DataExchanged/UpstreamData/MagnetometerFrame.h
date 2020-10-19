@@ -16,10 +16,10 @@ private:
 
     struct Dataset
     {
-        int16_t xAxis;
-        int16_t yAxis;
-        int16_t zAxis;
-        int timestamp;
+        float xAxis;
+        float yAxis;
+        float zAxis;
+        uint32_t timestamp;
     };
 
     std::vector<Dataset> datasets;
@@ -31,7 +31,7 @@ public:
     MagnetometerFrame();
     virtual ~MagnetometerFrame();
 
-    void deserialize(const char* iDataStream, const int iDataSize) override;
+    void deserialize(const uint8_t* iDataStream, const int iDataSize) override;
     std::string  serialize() override;
     void doTheProcessing() override;
     std::unique_ptr<Interface::UpstreamDataType> getClone();

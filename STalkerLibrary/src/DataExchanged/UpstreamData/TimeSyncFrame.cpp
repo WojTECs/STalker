@@ -24,7 +24,7 @@ void Interface::UpstreamData::TimeSyncFrame::sendData(ROSInterface::ROSInterface
     ROSClient.publishUInt32(data, rosTopic);
 }
 
-void Interface::UpstreamData::TimeSyncFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::TimeSyncFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {

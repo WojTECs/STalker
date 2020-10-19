@@ -25,7 +25,7 @@ void Interface::UpstreamData::PackageStatisticsFrame::sendData(ROSInterface::ROS
     ROSClient.publishUInt32Array(array, rosTopic);
 }
 
-void Interface::UpstreamData::PackageStatisticsFrame::deserialize(const char *iDataStream, const int iDataSize)
+void Interface::UpstreamData::PackageStatisticsFrame::deserialize(const uint8_t *iDataStream, const int iDataSize)
 {
     if(iDataSize != datasetBinarySize)
     {
